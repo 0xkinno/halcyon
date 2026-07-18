@@ -26,9 +26,12 @@ An autonomous, multi-dimensional sports trading agent desk that detects statisti
 
 ## Live Deployment Links
 
-- **Dashboard Visualizer**: [https://halcyon-sports-desk.vercel.app](https://halcyon-sports-desk.vercel.app)
-- **GitHub Repository**: [https://github.com/0xkinno/halcyon](https://github.com/0xkinno/halcyon)
-- **Solana Program ID (Devnet)**: `6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`
+| Platform Resource | URL / Address / Reference |
+| :--- | :--- |
+| **Dashboard Visualizer** | [https://halcyon-ten-sand.vercel.app](https://halcyon-ten-sand.vercel.app) |
+| **GitHub Repository** | [https://github.com/0xkinno/halcyon](https://github.com/0xkinno/halcyon) |
+| **YouTube Live Demo** | *Link Coming Soon* |
+| **Solana Program ID (Devnet)** | [`6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`](https://explorer.solana.com/address/6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J?cluster=devnet) |
 
 ---
 
@@ -51,6 +54,8 @@ HALCYON bridges live sports analytics with on-chain accountability. It connects 
 3. **Monitor Positions**: Under the **Open Positions** list, watch Agent A (Momentum) and Agent B (Reversion) submit their matching Solana transactions.
 4. **Inspect Settlement**: Once a trade concludes, click the transaction receipt in the **Merkle Settlement** tab to inspect the cryptographic verification proofs.
 
+![Demo Flow Diagram](public/assets/demo_flow.png)
+
 ---
 
 ## What's Real vs What's Sample Data
@@ -68,6 +73,46 @@ HALCYON bridges live sports analytics with on-chain accountability. It connects 
 
 ### NDimensionalStrategy
 Instead of evaluating single stats, HALCYON packages multi-variable conditions (e.g. `Goal Differential <= 1` AND `Corners > 9`) into a single, hashed prediction unit. Payouts are made when the validator executes SVM math validating a Merkle proof of the cumulative scores root.
+
+```text
++-----------------------------------------------------------------------+
+|                             TxLINE Oracle                             |
+|   (Aggregates live odds & match statistics from scores databases)     |
++---------------------------------------------------+-------------------+
+                                                    |
+                                                    | [Event Telemetries]
+                                                    v
++---------------------------------------------------+-------------------+
+|                           HALCYON Client                          |
+|   (Reads SSE broadcast streams, evaluates z-score anomalies,       |
+|    deploys automated maker/taker intent orders)                       |
++------------------------+----------------------------------+-----------+
+                         |                                  |
+         [Maker Intent] |                                  | [Taker Intent]
+                         v                                  v
++------------------------+----------------------------------+-----------+
+|                          Solana Devnet SVM                            |
+|                                                                       |
+|   +---------------------------------------------------------------+   |
+|   |                   Escrow Program Account                      |   |
+|   |                                                               |   |
+|   |   Locked Collateral: Agent A Stake (5 USDT)                   |   |
+|   |   Locked Collateral: Agent B Stake (5 USDT)                   |   |
+|   |                                                               |   |
+|   |   Instruction Execution:                                      |   |
+|   |     - create_trade (Locks token accounts)                     |   |
+|   |     - settleMatchedTrade (Validates Merkle path nodes)        |   |
+|   +-------------------------------+-------------------------------+   |
+|                                   ^                                   |
++-----------------------------------|-----------------------------------+
+                                    |
+                                    | [Merkle Path Proof Node Arrays]
+                                    |
++-----------------------------------|-----------------------------------+
+|                     Automated Settler Daemon                      |
+|   (Retrieves validation root proof, claims funds for winner node) |
++-----------------------------------------------------------------------+
+```
 
 ---
 
