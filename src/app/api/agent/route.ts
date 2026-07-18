@@ -5,17 +5,32 @@ import { getPositions, clearPositions } from "@/agent/executor";
 import { PRE_BUILT_STRATEGIES } from "@/agent/strategyEngine";
 import { isSafeModeActive, safeModeReason, config as safeModeConfig, updateConfig } from "@/agent/safeMode";
 
-// Auto-start the agent daemon on first API query to simplify hackathon staging
-let initialized = false;
-if (typeof window === "undefined" && !initialized) {
-  initialized = true;
-  startArenaRunner().catch((e) => {
-    console.error("[API AutoStart] Error starting arena runner daemon:", e);
-  });
+const WORKER_URL = process.env.AGENT_WORKER_URL;
+
+// Auto-start the local agent daemon ONLY if we are not using a remote worker
+if (!WORKER_URL) {
+  let initialized = false;
+  if (typeof window === "undefined" && !initialized) {
+    initialized = true;
+    startArenaRunner().catch((e) => {
+      console.error("[API AutoStart] Error starting arena runner daemon:", e);
+    });
+  }
 }
 
 export async function GET() {
   try {
+    if (WORKER_URL) {
+      // Proxy request to the worker
+      const res = await fetch(`${WORKER_URL}/api/state`, { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error(`Worker responded with status ${res.status}`);
+      }
+      const data = await res.json();
+      return NextResponse.json(data);
+    }
+
+    // Local Fallback
     const runnerState = getRunnerState();
     const signals = getSignals();
     const positions = getPositions();
@@ -43,6 +58,22 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
+    if (WORKER_URL) {
+      // Proxy request to the worker
+      const res = await fetch(`${WORKER_URL}/api/action`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        throw new Error(`Worker action responded with status ${res.status}`);
+      }
+      const data = await res.json();
+      return NextResponse.json(data);
+    }
+
+    // Local Fallback
     const { action, settings, agent } = body;
 
     if (action === "start") {

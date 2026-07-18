@@ -158,6 +158,9 @@ Arena Mode orchestrates two agents running concurrently on the same stream feed:
 
 ## Running Locally
 
+### Monolithic Dev Mode (Local Auto-Daemon)
+By default, the Next.js server runs the background agent loop inside its own server process:
+
 1. **Clone project & install dependencies**:
    ```bash
    git clone https://github.com/0xkinno/halcyon.git
@@ -172,10 +175,58 @@ Arena Mode orchestrates two agents running concurrently on the same stream feed:
    SERVICE_WALLET_SECRET_KEY=[...your Solana service keypair secret key byte array...]
    ```
 
-3. **Start Next.js development server**:
+3. **Start Next.js dev server**:
    ```bash
    npm run dev
    ```
+
+---
+
+### Separate Process Mode (Render/Railway Worker + Next.js Frontend)
+To run the background loop in a separate persistent Node process locally (simulating the Render production environment):
+
+1. **Start the Agent Worker Process**:
+   ```bash
+   PORT=3001 npm run worker
+   ```
+
+2. **Configure Frontend environment variables**:
+   Update `.env.local`:
+   ```env
+   NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+   AGENT_WORKER_URL=http://localhost:3001
+   ```
+
+3. **Start Next.js frontend server**:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## Production Deployment Steps (Render + Vercel)
+
+This project separates the stateless React dashboard (Vercel) from the stateful, persistent stream-listening background worker (Render) to avoid serverless function execution timeout limits.
+
+### 1. Deploy the Agent Worker (Render Web Service)
+1. Log in to **Render** and click **New > Web Service**.
+2. Connect your GitHub repository.
+3. Configure the following service settings:
+   - **Environment**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npx tsx src/agent/worker.ts`
+4. Add the following **Environment Variables** in Render:
+   - `PORT`: `3001` (or leave default)
+   - `NEXT_PUBLIC_SOLANA_RPC_URL`: `https://api.devnet.solana.com` (or a custom RPC endpoint)
+   - `SERVICE_WALLET_SECRET_KEY`: `[35,220,...]` (your 64-byte Solana Keypair array with brackets)
+5. Copy your deployed Render URL (e.g., `https://halcyon-worker.onrender.com`).
+
+### 2. Deploy the Dashboard (Vercel)
+1. Import your repository into **Vercel**.
+2. Add the following **Environment Variables** in Vercel:
+   - `AGENT_WORKER_URL`: `https://halcyon-worker.onrender.com` (your Render URL from step 1)
+   - `NEXT_PUBLIC_SOLANA_RPC_URL`: `https://api.devnet.solana.com`
+3. Click **Deploy**. Vercel will build the frontend and route all state queries and triggers directly to the persistent Render worker.
 
 ---
 
