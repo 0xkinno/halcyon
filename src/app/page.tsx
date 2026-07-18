@@ -668,7 +668,7 @@ export default function TradingDesk() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F2EB] text-[#121212] antialiased selection:bg-[#235BFF]/10 font-sans">
+    <div className="min-h-screen bg-[#F5F2EB] text-[#111111] antialiased selection:bg-[#235BFF]/10 font-sans">
       
       {/* V2 DESIGN SYSTEM - ELEGANT TYPOGRAPHY & SOLEMN ANIMATIONS */}
       <style jsx global>{`
@@ -681,6 +681,8 @@ export default function TradingDesk() {
 
         .font-serif-editorial {
           font-family: 'Cormorant Garamond', serif;
+          font-weight: 600;
+          color: #111111;
         }
 
         .font-mono-tech {
@@ -722,27 +724,27 @@ export default function TradingDesk() {
           
           {/* Sticky transparent header with blur */}
           <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-            isScrolled ? "bg-[#F5F2EB]/80 backdrop-blur-md border-b border-[#121212]/5 py-4" : "bg-transparent py-7"
+            isScrolled ? "bg-[#F5F2EB]/80 backdrop-blur-md border-b border-[#111111]/5 py-4" : "bg-transparent py-7"
           }`}>
             <div className="max-w-7xl mx-auto px-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-2 w-2 rounded-full bg-[#235BFF]" />
-                <span className="font-bold text-base tracking-[0.1em] text-[#121212] uppercase font-mono-tech">HALCYON</span>
+                <span className="font-bold text-base tracking-[0.1em] text-[#111111] uppercase font-mono-tech">HALCYON</span>
               </div>
 
               {/* Minimal links */}
-              <div className="hidden md:flex items-center gap-10 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#121212]/60">
-                <a href="#hero" className="hover:text-[#121212] transition-colors">Philosophy</a>
-                <a href="#telemetry" className="hover:text-[#121212] transition-colors">Telemetry</a>
-                <a href="#tactics" className="hover:text-[#121212] transition-colors">Tactics</a>
-                <a href="#vault" className="hover:text-[#121212] transition-colors">Vaults</a>
-                <a href="#sandbox" className="hover:text-[#121212] transition-colors">Sandbox</a>
+              <div className="hidden md:flex items-center gap-10 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#111111]/60">
+                <a href="#hero" className="hover:text-[#111111] transition-colors">Philosophy</a>
+                <a href="#telemetry" className="hover:text-[#111111] transition-colors">Telemetry</a>
+                <a href="#tactics" className="hover:text-[#111111] transition-colors">Tactics</a>
+                <a href="#vault" className="hover:text-[#111111] transition-colors">Vaults</a>
+                <a href="#sandbox" className="hover:text-[#111111] transition-colors">Sandbox</a>
               </div>
 
               <div className="flex items-center gap-6">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="rounded-full bg-[#121212] hover:bg-black px-6 py-3 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial shadow-sm hover:scale-[1.01]"
+                  className="rounded-full bg-[#111111] hover:bg-black px-6 py-3 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial shadow-sm hover:scale-[1.01]"
                 >
                   Launch OS
                 </button>
@@ -751,32 +753,32 @@ export default function TradingDesk() {
           </nav>
 
           {/* Hero Section - Magazine Layout */}
-          <section id="hero" className="pt-40 pb-28 px-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start flex-1">
+          <section id="hero" className="pt-36 pb-20 px-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start flex-1">
             <div className="lg:col-span-7 space-y-8 text-left">
-              <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#235BFF] uppercase block">
+              <span className="text-[9px] font-mono-tech font-bold tracking-[0.25em] text-[#235BFF] uppercase block">
                 SYSTEM DEPLOYMENT: SOLANA DEVNET
               </span>
               
-              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-light font-serif-editorial text-[#121212] leading-[0.9] tracking-tight">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold font-serif-editorial text-[#111111] leading-[0.85] tracking-tight">
                 Autonomous<br />
                 Sports<br />
                 Intelligence.
               </h1>
               
-              <p className="text-base text-[#121212]/70 font-light leading-relaxed max-w-lg">
+              <p className="text-base text-[#111111]/70 font-light leading-relaxed max-w-lg">
                 An institutional operating system executing multi-agent sports anomaly strategies. Trades are committed programmatically to locked escrow positions and settled verification-only.
               </p>
 
-              <div className="flex flex-wrap gap-5 pt-4">
+              <div className="flex flex-wrap gap-5 pt-2">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="px-8 py-4 rounded-full bg-[#235BFF] hover:bg-blue-700 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial"
+                  className="px-10 py-5 rounded-xl bg-[#111111] hover:bg-black text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#F5F2EB] transition-editorial shadow-sm"
                 >
                   Initialize Platform
                 </button>
                 <a
                   href="#telemetry"
-                  className="px-8 py-4 rounded-full border border-[#121212]/15 bg-transparent text-xs font-mono-tech uppercase tracking-[0.15em] text-[#121212] hover:bg-[#121212]/5 transition-editorial"
+                  className="px-10 py-5 rounded-xl border border-[#111111]/15 bg-transparent text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#111111] hover:bg-[#111111]/5 transition-editorial"
                 >
                   System Manual
                 </a>
@@ -792,22 +794,22 @@ export default function TradingDesk() {
                   className="w-full h-auto rounded-[20px] grayscale brightness-95 contrast-105"
                 />
               </div>
-              <div className="mt-4 text-left font-mono-tech text-[9px] text-[#121212]/50 tracking-[0.15em] uppercase flex justify-between px-2">
-                <span>PLATE #01 — TACTICAL FORECAST</span>
+              <div className="mt-4 text-left font-mono-tech text-[8px] text-[#111111]/45 tracking-[0.2em] uppercase flex justify-between px-2">
+                <span>PLATE #01 // TACTICAL FORECAST</span>
                 <span>SYSTEM ACTIVE</span>
               </div>
             </div>
           </section>
 
           {/* Philosophy Section */}
-          <section className="py-32 border-t border-[#121212]/5 bg-[#F6F3EC]">
+          <section className="py-24 border-t border-[#111111]/5 bg-[#F6F3EC]">
             <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               <div className="lg:col-span-5 text-left space-y-6">
-                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #02 — PHILOSOPHY</span>
-                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                <span className="text-[9px] font-mono-tech tracking-[0.25em] text-[#111111]/45 uppercase block">PLATE #02 // PHILOSOPHY</span>
+                <h2 className="text-4xl font-serif-editorial font-bold text-[#111111] leading-tight">
                   Bringing algorithmic rigor to sports events.
                 </h2>
-                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                <p className="text-xs text-[#111111]/60 leading-relaxed font-light">
                   Classical sports trading models fail due to human bias, central execution control, and counterparty delays. HALCYON removes intermediation by handling capital inside non-custodial smart contracts, triggered by real-time streams.
                 </p>
               </div>
@@ -825,7 +827,7 @@ export default function TradingDesk() {
           </section>
 
           {/* Section: Telemetry / Live Match */}
-          <section id="telemetry" className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5">
+          <section id="telemetry" className="py-24 bg-[#F5F2EB] border-t border-[#111111]/5">
             <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               <div className="lg:col-span-7">
                 <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EFE9DE]">
@@ -838,11 +840,11 @@ export default function TradingDesk() {
               </div>
 
               <div className="lg:col-span-5 text-left space-y-6">
-                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #03 — TELEMETRY</span>
-                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                <span className="text-[9px] font-mono-tech tracking-[0.25em] text-[#111111]/45 uppercase block">PLATE #03 // TELEMETRY</span>
+                <h2 className="text-4xl font-serif-editorial font-bold text-[#111111] leading-tight">
                   Deterministic streaming parameters.
                 </h2>
-                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                <p className="text-xs text-[#111111]/60 leading-relaxed font-light">
                   Continuous feed telemetry reads events directly from the database, feeding raw variables (goals, corners, possession, time index) into our mathematical z-score evaluation layers.
                 </p>
               </div>
@@ -850,14 +852,14 @@ export default function TradingDesk() {
           </section>
 
           {/* Section: Tactics Board */}
-          <section id="tactics" className="py-32 bg-[#F6F3EC] border-t border-[#121212]/5">
+          <section id="tactics" className="py-24 bg-[#F6F3EC] border-t border-[#111111]/5">
             <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               <div className="lg:col-span-5 text-left space-y-6">
-                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #04 — STRATEGY</span>
-                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                <span className="text-[9px] font-mono-tech tracking-[0.25em] text-[#111111]/45 uppercase block">PLATE #04 // STRATEGY</span>
+                <h2 className="text-4xl font-serif-editorial font-bold text-[#111111] leading-tight">
                   Dual-Agent arena consensus.
                 </h2>
-                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                <p className="text-xs text-[#111111]/60 leading-relaxed font-light">
                   Two isolated, opposing agents monitor the same telemetry block simultaneously. When a sharp pricing deviation occurs, Agent A matches Agent B in a balanced escrow vault trade.
                 </p>
               </div>
@@ -875,7 +877,7 @@ export default function TradingDesk() {
           </section>
 
           {/* Section: Escrow Vault */}
-          <section id="vault" className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5">
+          <section id="vault" className="py-24 bg-[#F5F2EB] border-t border-[#111111]/5">
             <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               <div className="lg:col-span-7">
                 <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EFE9DE]">
@@ -888,11 +890,11 @@ export default function TradingDesk() {
               </div>
 
               <div className="lg:col-span-5 text-left space-y-6">
-                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #05 — SECURITY</span>
-                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                <span className="text-[9px] font-mono-tech tracking-[0.25em] text-[#111111]/45 uppercase block">PLATE #05 // SECURITY</span>
+                <h2 className="text-4xl font-serif-editorial font-bold text-[#111111] leading-tight">
                   On-chain Merkle execution.
                 </h2>
-                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                <p className="text-xs text-[#111111]/60 leading-relaxed font-light">
                   Positions remain locked securely in a non-custodial program account on Solana. Payout validation is resolved by proving outcomes against oracle-generated Merkle root signatures.
                 </p>
               </div>
@@ -900,28 +902,28 @@ export default function TradingDesk() {
           </section>
 
           {/* Live Preview Sandbox */}
-          <section id="sandbox" className="py-32 bg-[#F6F3EC] border-t border-[#121212]/5">
+          <section id="sandbox" className="py-24 bg-[#F6F3EC] border-t border-[#111111]/5">
             <div className="max-w-7xl mx-auto px-10">
               <div className="max-w-2xl text-left space-y-4 mb-16">
-                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #06 — DATA STREAM</span>
-                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                <span className="text-[9px] font-mono-tech tracking-[0.25em] text-[#111111]/45 uppercase block">PLATE #06 // DATA STREAM</span>
+                <h2 className="text-4xl font-serif-editorial font-bold text-[#111111] leading-tight">
                   Active Sandbox Telemetry
                 </h2>
-                <p className="text-xs text-[#121212]/60 font-light">
+                <p className="text-xs text-[#111111]/60 font-light">
                   Audit the real-time incoming mock stream signals flowing directly through our server processing layers.
                 </p>
               </div>
 
               <div className="bg-[#F5F2EB] border-editorial rounded-[24px] p-8 shadow-sm max-w-4xl">
-                <div className="flex justify-between items-center pb-4 mb-4 border-b border-[#121212]/5">
-                  <span className="text-[10px] font-mono-tech font-bold text-[#121212]/50 tracking-[0.15em] uppercase">EVENT BROADCAST CHANNEL</span>
+                <div className="flex justify-between items-center pb-4 mb-4 border-b border-[#111111]/5">
+                  <span className="text-[9px] font-mono-tech font-bold text-[#111111]/55 tracking-[0.2em] uppercase">EVENT BROADCAST CHANNEL</span>
                   <span className="text-[9px] font-mono-tech bg-[#235BFF]/10 text-[#235BFF] px-3 py-1 rounded-full font-bold uppercase tracking-wider">SECURE SSE LINK</span>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-mono-tech">
                     <thead>
-                      <tr className="border-b border-[#121212]/5 text-[#121212]/50">
+                      <tr className="border-b border-[#111111]/5 text-[#111111]/50">
                         <th className="pb-3 uppercase tracking-wider">Fixture</th>
                         <th className="pb-3 uppercase tracking-wider">Type</th>
                         <th className="pb-3 uppercase tracking-wider">Old → New Odds</th>
@@ -929,11 +931,11 @@ export default function TradingDesk() {
                         <th className="pb-3 uppercase tracking-wider">Timestamp</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#121212]/5">
+                    <tbody className="divide-y divide-[#111111]/5">
                       {(signals.length ? signals.slice(0, 5) : DUMMY_SIGNALS).map((sig) => (
-                        <tr key={sig.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
-                          <td className="py-4 font-bold text-[#121212]">{sig.fixtureName}</td>
-                          <td className="py-4 text-[#121212]/60">{sig.marketType} ({sig.outcome})</td>
+                        <tr key={sig.id} className="text-[#111111]/80 hover:bg-[#111111]/2 transition-colors">
+                          <td className="py-4 font-bold text-[#111111]">{sig.fixtureName}</td>
+                          <td className="py-4 text-[#111111]/60">{sig.marketType} ({sig.outcome})</td>
                           <td className="py-4 font-bold">
                             {sig.oldOdds.toFixed(2)} → <span className="text-[#235BFF] font-extrabold">{sig.newOdds.toFixed(2)}</span>
                           </td>
@@ -942,7 +944,7 @@ export default function TradingDesk() {
                               {sig.zScore >= 0 ? "+" : ""}{sig.zScore.toFixed(2)}
                             </span>
                           </td>
-                          <td className="py-4 text-[#121212]/40 text-[10px]">{new Date(sig.timestamp).toLocaleTimeString()}</td>
+                          <td className="py-4 text-[#111111]/40 text-[10px]">{new Date(sig.timestamp).toLocaleTimeString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -953,18 +955,18 @@ export default function TradingDesk() {
           </section>
 
           {/* Footer Call to Action */}
-          <section className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5 flex-shrink-0">
+          <section className="py-24 bg-[#F5F2EB] border-t border-[#111111]/5 flex-shrink-0">
             <div className="max-w-4xl mx-auto px-10 text-left space-y-8">
-              <h2 className="text-5xl font-serif-editorial font-light text-[#121212] leading-tight">
+              <h2 className="text-5xl font-serif-editorial font-bold text-[#111111] leading-tight">
                 Audit system transactions and telemetry outcomes.
               </h2>
-              <p className="text-xs text-[#121212]/60 leading-relaxed font-light max-w-xl">
+              <p className="text-xs text-[#111111]/60 leading-relaxed font-light max-w-xl">
                 Open the system dashboard to trace running tournament logs, deploy local faucet testing, and inspect Merkle proof audit chains.
               </p>
               <div className="pt-4">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="px-10 py-5 rounded-full bg-[#121212] hover:bg-black text-xs font-mono-tech uppercase tracking-[0.2em] text-[#F5F2EB] transition-editorial"
+                  className="px-10 py-5 rounded-xl bg-[#111111] hover:bg-black text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#F5F2EB] transition-editorial"
                 >
                   🚀 Mount OS Terminal
                 </button>
@@ -979,15 +981,15 @@ export default function TradingDesk() {
         <div className="page-fade-in flex h-screen overflow-hidden bg-[#F5F2EB]">
           
           {/* Dashboard Left Sidebar - Clean & Minimalist (Reference 1 Styled) */}
-          <aside className="w-72 border-r border-[#121212]/10 bg-[#F5F2EB] flex flex-col justify-between flex-shrink-0">
+          <aside className="w-72 border-r border-[#111111]/10 bg-[#F5F2EB] flex flex-col justify-between flex-shrink-0">
             <div className="p-8 flex-1 flex flex-col">
               
               {/* Product Branding Header */}
-              <div className="flex items-center gap-3 pb-8 border-b border-[#121212]/10 mb-8">
+              <div className="flex items-center gap-3 pb-8 border-b border-[#111111]/10 mb-8">
                 <div className="h-2 w-2 rounded-full bg-[#235BFF]" />
                 <div>
-                  <h1 className="font-bold text-sm tracking-[0.1em] text-[#121212] uppercase font-mono-tech">HALCYON</h1>
-                  <span className="text-[8px] block text-[#121212]/40 font-mono-tech tracking-[0.15em] uppercase">SPORTS INTEL OS</span>
+                  <h1 className="font-bold text-sm tracking-[0.1em] text-[#111111] uppercase font-mono-tech">HALCYON</h1>
+                  <span className="text-[8px] block text-[#111111]/40 font-mono-tech tracking-[0.15em] uppercase">SPORTS INTEL OS</span>
                 </div>
               </div>
 
@@ -996,21 +998,21 @@ export default function TradingDesk() {
                 
                 {/* Category 1 */}
                 <div className="space-y-1.5">
-                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">TELEMETRY DESK</p>
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase">TELEMETRY DESK</p>
                   
                   <button
                     onClick={() => setActiveTab("overview")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "overview"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <Activity className="h-4 w-4" strokeWidth={1} />
                       <span>Overview</span>
                     </div>
-                    <span className="text-[10px] font-bold text-[#121212]/60">
+                    <span className="text-[10px] font-bold text-[#111111]/60">
                       {openPositions.length}
                     </span>
                   </button>
@@ -1019,8 +1021,8 @@ export default function TradingDesk() {
                     onClick={() => setActiveTab("signals")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "signals"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -1038,15 +1040,15 @@ export default function TradingDesk() {
                     onClick={() => setActiveTab("strategies")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "strategies"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <Layers className="h-4 w-4" strokeWidth={1} />
                       <span>Strategies</span>
                     </div>
-                    <span className="text-[10px] text-[#121212]/40">
+                    <span className="text-[10px] text-[#111111]/40">
                       {strategies.length || 5}
                     </span>
                   </button>
@@ -1055,15 +1057,15 @@ export default function TradingDesk() {
                     onClick={() => setActiveTab("arena")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "arena"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <Award className="h-4 w-4" strokeWidth={1} />
                       <span>Arena Duel</span>
                     </div>
-                    <span className="text-[8px] border border-[#121212]/20 rounded px-1.5 py-0.5 text-[#121212]/40 font-bold">
+                    <span className="text-[8px] border border-[#111111]/20 rounded px-1.5 py-0.5 text-[#111111]/40 font-bold">
                       A vs B
                     </span>
                   </button>
@@ -1071,14 +1073,14 @@ export default function TradingDesk() {
 
                 {/* Category 2 */}
                 <div className="space-y-1.5">
-                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">ESCROW REGISTRY</p>
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase">ESCROW REGISTRY</p>
 
                   <button
                     onClick={() => setActiveTab("positions")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "positions"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -1091,15 +1093,15 @@ export default function TradingDesk() {
                     onClick={() => setActiveTab("settlement")}
                     className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "settlement"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <FileCheck className="h-4 w-4" strokeWidth={1} />
                       <span>Settlements</span>
                     </div>
-                    <span className="text-[10px] text-[#121212]/40">
+                    <span className="text-[10px] text-[#111111]/40">
                       {settledPositions.length}
                     </span>
                   </button>
@@ -1107,14 +1109,14 @@ export default function TradingDesk() {
 
                 {/* Category 3 */}
                 <div className="space-y-1.5">
-                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">SAFETY CODES</p>
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase">SAFETY CODES</p>
 
                   <button
                     onClick={() => setActiveTab("settings")}
                     className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "settings"
-                        ? "bg-[#121212]/5 text-[#121212] font-bold"
-                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
+                        ? "bg-[#111111]/5 text-[#111111] font-bold"
+                        : "text-[#111111]/50 hover:bg-[#111111]/2 hover:text-[#111111]"
                     }`}
                   >
                     <SettingsIcon className="h-4 w-4" strokeWidth={1} />
@@ -1125,7 +1127,7 @@ export default function TradingDesk() {
             </div>
 
             {/* Bottom Developer Tag */}
-            <div className="p-8 border-t border-[#121212]/10 text-[9px] font-mono-tech text-[#121212]/30 tracking-[0.15em] uppercase">
+            <div className="p-8 border-t border-[#111111]/10 text-[9px] font-mono-tech text-[#111111]/30 tracking-[0.15em] uppercase">
               <span>SYSTEM HOST: VERCEL CLOUD</span>
               <span className="block font-bold mt-1">PROD TERMINAL LINK</span>
             </div>
@@ -1135,49 +1137,49 @@ export default function TradingDesk() {
           <div className="flex-1 flex flex-col overflow-hidden">
             
             {/* Top Navigation Control bar (Reference 1 Spacing) */}
-            <header className="h-20 bg-[#F5F2EB] border-b border-[#121212]/10 px-8 flex items-center justify-between flex-shrink-0">
+            <header className="h-20 bg-[#F5F2EB] border-b border-[#111111]/10 px-8 flex items-center justify-between flex-shrink-0">
               
               <div className="flex items-center gap-6">
                 {/* Back to Home CTA */}
                 <button
                   onClick={() => setViewMode("landing")}
-                  className="flex items-center gap-2 text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#121212]/60 hover:text-[#121212] transition-colors border border-[#121212]/15 px-4 py-2.5 rounded-full bg-transparent"
+                  className="flex items-center gap-2 text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#111111]/60 hover:text-[#111111] transition-colors border border-[#111111]/15 px-4 py-2.5 rounded-full bg-transparent"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1} />
                   <span>Exit Terminal</span>
                 </button>
 
                 {/* Breadcrumbs */}
-                <div className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">
+                <div className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase">
                   <span>HALCYON OS</span>
-                  <span className="mx-2 text-[#121212]/20">/</span>
-                  <span className="text-[#121212]">{activeTab}</span>
+                  <span className="mx-2 text-[#111111]/20">/</span>
+                  <span className="text-[#111111]">{activeTab}</span>
                 </div>
               </div>
 
               {/* Status Badges */}
               <div className="flex items-center gap-3 text-[10px] font-mono-tech tracking-[0.1em] uppercase">
-                <div className="hidden lg:flex items-center gap-1 bg-[#121212]/5 rounded-xl px-3.5 py-2 text-[#121212] font-bold border border-[#121212]/5">
+                <div className="hidden lg:flex items-center gap-1 bg-[#111111]/5 rounded-xl px-3.5 py-2 text-[#111111] font-bold border border-[#111111]/5">
                   <span>NET:</span>
                   <span>Solana Devnet</span>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#121212]/10 rounded-xl px-3.5 py-2">
-                  <span className="text-[#121212]/50">Stream:</span>
+                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#111111]/10 rounded-xl px-3.5 py-2">
+                  <span className="text-[#111111]/50">Stream:</span>
                   <div className="flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="font-bold text-[#121212]">
+                    <span className="font-bold text-[#111111]">
                       {runnerState.sseConnected ? "LIVE" : runnerState.status === "simulating" ? "SIMULATED" : "DISCONNECTED"}
                     </span>
                   </div>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#121212]/10 rounded-xl px-3.5 py-2">
-                  <span className="text-[#121212]/50">Status:</span>
-                  <span className="font-bold text-[#121212]">{runnerState.status}</span>
+                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#111111]/10 rounded-xl px-3.5 py-2">
+                  <span className="text-[#111111]/50">Status:</span>
+                  <span className="font-bold text-[#111111]">{runnerState.status}</span>
                 </div>
 
-                <div className="bg-[#121212] text-[#F5F2EB] rounded-xl px-4 py-2 font-bold font-mono-tech tracking-normal">
+                <div className="bg-[#111111] text-[#F5F2EB] rounded-xl px-4 py-2 font-bold font-mono-tech tracking-normal">
                   <span>{uptimeStr}</span>
                 </div>
               </div>
@@ -1208,7 +1210,7 @@ export default function TradingDesk() {
                   onClick={() => triggerAction("clear")}
                   disabled={actionPending}
                   title="Clear Telemetry State"
-                  className="rounded-full border border-[#121212]/15 bg-transparent hover:bg-[#121212]/5 disabled:opacity-50 p-3 text-[#121212]/60 transition-editorial"
+                  className="rounded-full border border-[#111111]/15 bg-transparent hover:bg-[#111111]/5 disabled:opacity-50 p-3 text-[#111111]/60 transition-editorial"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -1225,31 +1227,31 @@ export default function TradingDesk() {
                   {/* Grid Stat Cards (Reference 1 Proportions) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
-                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">TELEMETRY SIGNALS LOGGED</span>
-                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#121212]">
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase block">TELEMETRY SIGNALS LOGGED</span>
+                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#111111]">
                         {Math.max(runnerState.signalsCount, signals.length)}
                       </div>
                     </div>
 
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
-                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">ACTIVE TOURNAMENT CONTRACTS</span>
-                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#121212]">{openPositions.length}</div>
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase block">ACTIVE TOURNAMENT CONTRACTS</span>
+                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#111111]">{openPositions.length}</div>
                     </div>
 
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
-                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">ACTIVE VAULT EXPOSURE</span>
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase block">ACTIVE VAULT EXPOSURE</span>
                       <div className="mt-4 text-4xl font-light font-serif-editorial text-[#235BFF]">
-                        {totalExposureUsdt} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#121212]/40">USDT</span>
+                        {totalExposureUsdt} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#111111]/40">USDT</span>
                       </div>
                     </div>
 
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
-                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">CUMULATIVE REALIZED P&L</span>
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#111111]/40 uppercase block">CUMULATIVE REALIZED P&L</span>
                       <div className={`mt-4 text-4xl font-light font-serif-editorial ${
                         metricsA.profit + metricsB.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"
                       }`}>
                         {metricsA.profit + metricsB.profit >= 0 ? "+" : ""}
-                        {(metricsA.profit + metricsB.profit).toFixed(2)} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#121212]/40">USDT</span>
+                        {(metricsA.profit + metricsB.profit).toFixed(2)} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#111111]/40">USDT</span>
                       </div>
                     </div>
                   </div>
@@ -1257,19 +1259,19 @@ export default function TradingDesk() {
                   {/* Interactive Sandbox Duel Control Panel */}
                   <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="flex items-center gap-4 text-left">
-                      <div className="h-10 w-10 rounded-full border-editorial bg-[#121212]/5 flex items-center justify-center text-[#121212]/80">
+                      <div className="h-10 w-10 rounded-full border-editorial bg-[#111111]/5 flex items-center justify-center text-[#111111]/80">
                         <Zap className="h-5 w-5" strokeWidth={1} />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#121212] text-xs uppercase tracking-[0.15em] font-mono-tech">Escrow Verification Sandbox</h4>
-                        <p className="text-[#121212]/50 text-xs mt-1 font-light">
+                        <h4 className="font-bold text-[#111111] text-xs uppercase tracking-[0.15em] font-mono-tech">Escrow Verification Sandbox</h4>
+                        <p className="text-[#111111]/50 text-xs mt-1 font-light">
                           Manually push an anomaly z-score flag to lock double-agent collateral into Solana vault accounts.
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={handleTriggerManualDuel}
-                      className="rounded-full bg-[#121212] hover:bg-black text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] px-6 py-4 shadow-sm flex-shrink-0 transition-editorial"
+                      className="rounded-full bg-[#111111] hover:bg-black text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] px-6 py-4 shadow-sm flex-shrink-0 transition-editorial"
                     >
                       🚀 Trigger Escrow Duel Instruction
                     </button>
@@ -1277,22 +1279,22 @@ export default function TradingDesk() {
 
                   {/* Active Escrow Exposure Register (Editorial Table) */}
                   <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
-                    <div className="border-b border-[#121212]/10 px-8 py-5 flex items-center justify-between">
-                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Active Escrow Ledgers</h3>
-                      <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50">NON-CUSTODIAL ESCROW VALUATION</span>
+                    <div className="border-b border-[#111111]/10 px-8 py-5 flex items-center justify-between">
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase">Active Escrow Ledgers</h3>
+                      <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-3 py-1 text-[#111111]/50">NON-CUSTODIAL ESCROW VALUATION</span>
                     </div>
                     
                     <div className="p-8">
                       {openPositions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
-                          <Layers className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                        <div className="flex flex-col items-center justify-center py-20 text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                          <Layers className="mb-3 h-8 w-8 text-[#111111]/20" strokeWidth={1} />
                           <span>NO ACTIVE LOCKS FOUND IN VAULT STATE</span>
                         </div>
                       ) : (
                         <div className="overflow-x-auto">
                           <table className="w-full text-left text-xs font-mono-tech">
                             <thead>
-                              <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                              <tr className="border-b border-[#111111]/10 text-[#111111]/40">
                                 <th className="pb-4 uppercase tracking-[0.1em]">Agent</th>
                                 <th className="pb-4 uppercase tracking-[0.1em]">Fixture Event</th>
                                 <th className="pb-4 uppercase tracking-[0.1em]">Strategy</th>
@@ -1302,9 +1304,9 @@ export default function TradingDesk() {
                                 <th className="pb-4 uppercase tracking-[0.1em]">Audit Proof</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#121212]/5">
+                            <tbody className="divide-y divide-[#111111]/5">
                               {openPositions.map((pos) => (
-                                <tr key={pos.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                                <tr key={pos.id} className="text-[#111111]/80 hover:bg-[#111111]/2 transition-colors">
                                   <td className="py-5">
                                     <span className={`rounded border px-2.5 py-1 text-[9px] font-bold ${
                                       pos.agent === "Agent A" ? "bg-blue-50/50 text-[#235BFF] border-[#235BFF]/10" : "bg-purple-50/50 text-purple-700 border-purple-700/10"
@@ -1312,8 +1314,8 @@ export default function TradingDesk() {
                                       {pos.agent}
                                     </span>
                                   </td>
-                                  <td className="py-5 font-bold text-[#121212]">{pos.fixtureName}</td>
-                                  <td className="py-5 text-[#121212]/50 text-xs">{pos.strategyName}</td>
+                                  <td className="py-5 font-bold text-[#111111]">{pos.fixtureName}</td>
+                                  <td className="py-5 text-[#111111]/50 text-xs">{pos.strategyName}</td>
                                   <td className="py-5">{pos.stake} USDT</td>
                                   <td className="py-5 text-[#235BFF] font-bold">{pos.odds.toFixed(2)}</td>
                                   <td className="py-5">
@@ -1329,7 +1331,7 @@ export default function TradingDesk() {
                                       href={`https://explorer.solana.com/tx/${pos.txSignature}?cluster=devnet`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[#121212]/40 hover:text-[#235BFF] transition-colors"
+                                      className="inline-flex items-center gap-1 text-[#111111]/40 hover:text-[#235BFF] transition-colors"
                                     >
                                       <span>Verify root</span>
                                       <ExternalLink className="h-3 w-3" strokeWidth={1} />
@@ -1349,22 +1351,22 @@ export default function TradingDesk() {
               {/* TAB 2: SIGNALS REGISTRY */}
               {activeTab === "signals" && (
                 <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-[#121212]/10 px-8 py-5">
-                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Live Telemetry Signals Registry</h3>
-                    <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50">TELEMETRY IN-PLAY WINDOW</span>
+                  <div className="flex items-center justify-between border-b border-[#111111]/10 px-8 py-5">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase">Live Telemetry Signals Registry</h3>
+                    <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-3 py-1 text-[#111111]/50">TELEMETRY IN-PLAY WINDOW</span>
                   </div>
                   
                   <div className="p-8">
                     {signals.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
-                        <TrendingUp className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                      <div className="flex flex-col items-center justify-center py-20 text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <TrendingUp className="mb-3 h-8 w-8 text-[#111111]/20" strokeWidth={1} />
                         <span>WAITING FOR TELEMETRY EVENT STREAMS</span>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs font-mono-tech">
                           <thead>
-                            <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                            <tr className="border-b border-[#111111]/10 text-[#111111]/40">
                               <th className="pb-4 uppercase tracking-[0.1em]">Time</th>
                               <th className="pb-4 uppercase tracking-[0.1em]">Fixture Match</th>
                               <th className="pb-4 uppercase tracking-[0.1em]">Market Event</th>
@@ -1373,16 +1375,16 @@ export default function TradingDesk() {
                               <th className="pb-4 uppercase tracking-[0.1em]">Velocity Index</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#121212]/5">
+                          <tbody className="divide-y divide-[#111111]/5">
                             {signals.map((sig) => (
-                              <tr key={sig.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
-                                <td className="py-4 text-[#121212]/40">{new Date(sig.timestamp).toLocaleTimeString()}</td>
-                                <td className="py-4 font-bold text-[#121212]">{sig.fixtureName}</td>
-                                <td className="py-4 uppercase text-xs text-[#121212]/50">{sig.marketType} ({sig.outcome})</td>
+                              <tr key={sig.id} className="text-[#111111]/80 hover:bg-[#111111]/2 transition-colors">
+                                <td className="py-4 text-[#111111]/40">{new Date(sig.timestamp).toLocaleTimeString()}</td>
+                                <td className="py-4 font-bold text-[#111111]">{sig.fixtureName}</td>
+                                <td className="py-4 uppercase text-xs text-[#111111]/50">{sig.marketType} ({sig.outcome})</td>
                                 <td className="py-4 font-bold">
-                                  <span className="text-[#121212]/30">{sig.oldOdds.toFixed(2)}</span>
-                                  <span className="mx-2 text-[#121212]/20">→</span>
-                                  <span className="text-[#121212]">{sig.newOdds.toFixed(2)}</span>
+                                  <span className="text-[#111111]/30">{sig.oldOdds.toFixed(2)}</span>
+                                  <span className="mx-2 text-[#111111]/20">→</span>
+                                  <span className="text-[#111111]">{sig.newOdds.toFixed(2)}</span>
                                 </td>
                                 <td className="py-4">
                                   <span className={`px-2.5 py-1 rounded text-[10px] font-bold ${
@@ -1391,7 +1393,7 @@ export default function TradingDesk() {
                                     {sig.zScore >= 0 ? "+" : ""}{sig.zScore.toFixed(2)}
                                   </span>
                                 </td>
-                                <td className="py-4 text-[#121212]/50">{sig.velocity >= 0 ? "+" : ""}{sig.velocity.toFixed(4)}/s</td>
+                                <td className="py-4 text-[#111111]/50">{sig.velocity >= 0 ? "+" : ""}{sig.velocity.toFixed(4)}/s</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1408,21 +1410,21 @@ export default function TradingDesk() {
                   {(strategies.length ? strategies : PRE_BUILT_DUMMY_STRATEGIES).map((strat) => (
                     <div key={strat.name} className="flex flex-col justify-between rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
                       <div className="space-y-5">
-                        <div className="flex items-center justify-between border-b border-[#121212]/10 pb-4">
-                          <h3 className="font-bold text-xs font-mono-tech uppercase tracking-wider text-[#121212]">{strat.name}</h3>
-                          <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-0.5 text-[#121212]/50 uppercase tracking-widest font-bold">MONITOR ACTIVE</span>
+                        <div className="flex items-center justify-between border-b border-[#111111]/10 pb-4">
+                          <h3 className="font-bold text-xs font-mono-tech uppercase tracking-wider text-[#111111]">{strat.name}</h3>
+                          <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-3 py-0.5 text-[#111111]/50 uppercase tracking-widest font-bold">MONITOR ACTIVE</span>
                         </div>
-                        <p className="text-xs text-[#121212]/60 leading-relaxed font-light">{strat.description}</p>
+                        <p className="text-xs text-[#111111]/60 leading-relaxed font-light">{strat.description}</p>
                         
                         <div className="space-y-2 text-left">
-                          <span className="text-[9px] font-mono-tech font-bold tracking-[0.15em] text-[#121212]/40 uppercase block">Telemetry Parameters</span>
+                          <span className="text-[9px] font-mono-tech font-bold tracking-[0.15em] text-[#111111]/40 uppercase block">Telemetry Parameters</span>
                           <div className="space-y-1.5">
                             {strat.conditions.map((cond, idx) => (
-                              <div key={idx} className="flex items-center justify-between rounded-xl bg-[#121212]/2 border border-[#121212]/5 px-4 py-3 text-xs font-mono-tech">
+                              <div key={idx} className="flex items-center justify-between rounded-xl bg-[#111111]/2 border border-[#111111]/5 px-4 py-3 text-xs font-mono-tech">
                                 <span className="text-[#235BFF] font-bold uppercase">{cond.stat.replace("_", " ")}</span>
                                 <div className="space-x-1.5">
-                                  <span className="text-[#121212]/30">{cond.comparison}</span>
-                                  <span className="text-[#121212] font-bold">{cond.threshold}</span>
+                                  <span className="text-[#111111]/30">{cond.comparison}</span>
+                                  <span className="text-[#111111] font-bold">{cond.threshold}</span>
                                 </div>
                               </div>
                             ))}
@@ -1430,14 +1432,14 @@ export default function TradingDesk() {
                         </div>
                       </div>
 
-                      <div className="mt-8 border-t border-[#121212]/10 pt-4 text-xs font-mono-tech text-[#121212]/50 space-y-1.5 text-left">
+                      <div className="mt-8 border-t border-[#111111]/10 pt-4 text-xs font-mono-tech text-[#111111]/50 space-y-1.5 text-left">
                         <div className="flex justify-between">
                           <span>Trigger Anomaly:</span>
-                          <span className="text-[#121212] font-bold">{strat.entry_signal}</span>
+                          <span className="text-[#111111] font-bold">{strat.entry_signal}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Capital allocation:</span>
-                          <span className="text-[#121212] font-bold">{strat.stake_usdt} USDT</span>
+                          <span className="text-[#111111] font-bold">{strat.stake_usdt} USDT</span>
                         </div>
                       </div>
                     </div>
@@ -1453,56 +1455,56 @@ export default function TradingDesk() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Agent A */}
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm text-left">
-                      <div className="flex items-center justify-between pb-4 border-b border-[#121212]/10">
+                      <div className="flex items-center justify-between pb-4 border-b border-[#111111]/10">
                         <div>
-                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#121212]/40 uppercase block">AGENT A CONTRACTS</span>
-                          <h4 className="font-serif-editorial text-2xl font-light text-[#121212] mt-1">Trend Follower</h4>
+                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#111111]/40 uppercase block">AGENT A CONTRACTS</span>
+                          <h4 className="font-serif-editorial text-2xl font-light text-[#111111] mt-1">Trend Follower</h4>
                         </div>
-                        <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-2.5 py-0.5 text-[#121212]/50 font-bold uppercase">ONLINE</span>
+                        <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-2.5 py-0.5 text-[#111111]/50 font-bold uppercase">ONLINE</span>
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 pt-6 font-mono-tech text-xs">
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
                           <span className={`text-sm font-extrabold ${metricsA.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"}`}>
                             {metricsA.profit >= 0 ? "+" : ""}{metricsA.profit.toFixed(2)} USDT
                           </span>
                         </div>
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
-                          <span className="text-sm font-extrabold text-[#121212]">{metricsA.positionsCount}</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
+                          <span className="text-sm font-extrabold text-[#111111]">{metricsA.positionsCount}</span>
                         </div>
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
-                          <span className="text-sm font-extrabold text-[#121212]">{metricsA.winRate.toFixed(1)}%</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
+                          <span className="text-sm font-extrabold text-[#111111]">{metricsA.winRate.toFixed(1)}%</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Agent B */}
                     <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm text-left">
-                      <div className="flex items-center justify-between pb-4 border-b border-[#121212]/10">
+                      <div className="flex items-center justify-between pb-4 border-b border-[#111111]/10">
                         <div>
-                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#121212]/40 uppercase block">AGENT B CONTRACTS</span>
-                          <h4 className="font-serif-editorial text-2xl font-light text-[#121212] mt-1">Mean Reversion</h4>
+                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#111111]/40 uppercase block">AGENT B CONTRACTS</span>
+                          <h4 className="font-serif-editorial text-2xl font-light text-[#111111] mt-1">Mean Reversion</h4>
                         </div>
-                        <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-2.5 py-0.5 text-[#121212]/50 font-bold uppercase">ONLINE</span>
+                        <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-2.5 py-0.5 text-[#111111]/50 font-bold uppercase">ONLINE</span>
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 pt-6 font-mono-tech text-xs">
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
                           <span className={`text-sm font-extrabold ${metricsB.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"}`}>
                             {metricsB.profit >= 0 ? "+" : ""}{metricsB.profit.toFixed(2)} USDT
                           </span>
                         </div>
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
-                          <span className="text-sm font-extrabold text-[#121212]">{metricsB.positionsCount}</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
+                          <span className="text-sm font-extrabold text-[#111111]">{metricsB.positionsCount}</span>
                         </div>
                         <div>
-                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
-                          <span className="text-sm font-extrabold text-[#121212]">{metricsB.winRate.toFixed(1)}%</span>
+                          <span className="text-[#111111]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
+                          <span className="text-sm font-extrabold text-[#111111]">{metricsB.winRate.toFixed(1)}%</span>
                         </div>
                       </div>
                     </div>
@@ -1511,17 +1513,17 @@ export default function TradingDesk() {
                   {/* Financial Times Style curve chart */}
                   <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
                     <div className="flex justify-between items-center mb-6">
-                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Realized Profit curves</h3>
-                      <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50 uppercase tracking-widest font-bold font-mono-tech">ANALYTICAL TELEMETRY</span>
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase">Realized Profit curves</h3>
+                      <span className="text-[9px] font-mono-tech border border-[#111111]/10 rounded-full px-3 py-1 text-[#111111]/50 uppercase tracking-widest font-bold font-mono-tech">ANALYTICAL TELEMETRY</span>
                     </div>
                     
                     {pointsA.length <= 1 && pointsB.length <= 1 ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
-                        <Sliders className="h-6 w-6 text-[#121212]/20 mb-2" strokeWidth={1} />
+                      <div className="flex flex-col items-center justify-center py-20 text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <Sliders className="h-6 w-6 text-[#111111]/20 mb-2" strokeWidth={1} />
                         <span>WAITING FOR SETTLED HISTORICAL RESULTS FOR CHARTING</span>
                       </div>
                     ) : (
-                      <div className="relative h-64 w-full border-l border-b border-[#121212]/15 pt-4">
+                      <div className="relative h-64 w-full border-l border-b border-[#111111]/15 pt-4">
                         <svg className="h-full w-full overflow-visible" preserveAspectRatio="none">
                           <line x1="0" y1="50%" x2="100%" y2="50%" stroke="rgba(18,18,18,0.06)" strokeWidth="1" strokeDasharray="3 3" />
                           
@@ -1537,7 +1539,7 @@ export default function TradingDesk() {
                           <path
                             d={makeSvgPath(pointsB, 800, 240)}
                             fill="none"
-                            stroke="#121212"
+                            stroke="#111111"
                             strokeWidth="2.5"
                             strokeLinecap="round"
                             className="transition-all duration-300"
@@ -1547,11 +1549,11 @@ export default function TradingDesk() {
                         <div className="absolute top-4 right-4 flex gap-4 text-[9px] font-mono-tech uppercase tracking-[0.1em]">
                           <div className="flex items-center gap-2">
                             <span className="h-2 w-2 rounded-full bg-[#235BFF]" />
-                            <span className="text-[#121212]/50">Agent A (Trend Follower)</span>
+                            <span className="text-[#111111]/50">Agent A (Trend Follower)</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-[#121212]" />
-                            <span className="text-[#121212]/50">Agent B (Mean Reversion)</span>
+                            <span className="h-2 w-2 rounded-full bg-[#111111]" />
+                            <span className="text-[#111111]/50">Agent B (Mean Reversion)</span>
                           </div>
                         </div>
                       </div>
@@ -1563,21 +1565,21 @@ export default function TradingDesk() {
               {/* TAB 5: LEDGER REGISTER */}
               {activeTab === "positions" && (
                 <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
-                  <div className="border-b border-[#121212]/10 px-8 py-5">
-                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Historical Ledger Register</h3>
+                  <div className="border-b border-[#111111]/10 px-8 py-5">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase">Historical Ledger Register</h3>
                   </div>
                   
                   <div className="p-8">
                     {positions.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
-                        <Sliders className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                      <div className="flex flex-col items-center justify-center py-20 text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <Sliders className="mb-3 h-8 w-8 text-[#111111]/20" strokeWidth={1} />
                         <span>NO TRANSACTIONS FOUND IN LEDGER</span>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs font-mono-tech">
                           <thead>
-                            <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                            <tr className="border-b border-[#111111]/10 text-[#111111]/40">
                               <th className="pb-4 uppercase tracking-[0.1em]">PDA Key Address</th>
                               <th className="pb-4 uppercase tracking-[0.1em]">Agent</th>
                               <th className="pb-4 uppercase tracking-[0.1em]">Strategy</th>
@@ -1588,12 +1590,12 @@ export default function TradingDesk() {
                               <th className="pb-4 uppercase tracking-[0.1em]">Contract audit</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#121212]/5">
+                          <tbody className="divide-y divide-[#111111]/5">
                             {positions.map((pos) => (
-                              <tr key={pos.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                              <tr key={pos.id} className="text-[#111111]/80 hover:bg-[#111111]/2 transition-colors">
                                 <td className="py-5 font-bold">
                                   <div>ID: {pos.id.slice(-6)}</div>
-                                  <div className="text-[9px] text-[#121212]/40 truncate max-w-[120px] font-normal">{pos.makerIntentPda}</div>
+                                  <div className="text-[9px] text-[#111111]/40 truncate max-w-[120px] font-normal">{pos.makerIntentPda}</div>
                                 </td>
                                 <td className="py-5">
                                   <span className={`rounded border px-2.5 py-1 text-[9px] font-bold ${
@@ -1602,8 +1604,8 @@ export default function TradingDesk() {
                                     {pos.agent}
                                   </span>
                                 </td>
-                                <td className="py-5 text-[#121212]/50 text-xs">{pos.strategyName}</td>
-                                <td className="py-5 font-bold text-[#121212]">{pos.fixtureName}</td>
+                                <td className="py-5 text-[#111111]/50 text-xs">{pos.strategyName}</td>
+                                <td className="py-5 font-bold text-[#111111]">{pos.fixtureName}</td>
                                 <td className="py-5">{pos.stake} USDT</td>
                                 <td className="py-5 text-[#235BFF] font-bold">{pos.odds.toFixed(2)}</td>
                                 <td className="py-5">
@@ -1624,7 +1626,7 @@ export default function TradingDesk() {
                                     href={`https://explorer.solana.com/tx/${pos.txSignature}?cluster=devnet`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-[#121212]/40 hover:text-[#235BFF] transition-colors"
+                                    className="inline-flex items-center gap-1 text-[#111111]/40 hover:text-[#235BFF] transition-colors"
                                   >
                                     <span>Verify</span>
                                     <ExternalLink className="h-3 w-3" strokeWidth={1} />
@@ -1646,14 +1648,14 @@ export default function TradingDesk() {
                   
                   {/* Journal List */}
                   <div className="lg:col-span-2 rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
-                    <div className="border-b border-[#121212]/10 px-8 py-5">
-                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Merkle Proof Settle Journal</h3>
+                    <div className="border-b border-[#111111]/10 px-8 py-5">
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase">Merkle Proof Settle Journal</h3>
                     </div>
                     
                     <div className="p-8">
                       {settledPositions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
-                          <FileCheck className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                        <div className="flex flex-col items-center justify-center py-20 text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                          <FileCheck className="mb-3 h-8 w-8 text-[#111111]/20" strokeWidth={1} />
                           <span>NO SETTLED ARCHIVES FOUND IN STORAGE</span>
                         </div>
                       ) : (
@@ -1664,28 +1666,28 @@ export default function TradingDesk() {
                               onClick={() => setSelectedSettledId(pos.id)}
                               className={`flex items-center justify-between rounded-xl border p-5 cursor-pointer transition-editorial text-left ${
                                 selectedSettledId === pos.id
-                                  ? "border-[#121212] bg-[#121212]/3"
-                                  : "border-[#121212]/10 bg-transparent hover:bg-[#121212]/2"
+                                  ? "border-[#111111] bg-[#111111]/3"
+                                  : "border-[#111111]/10 bg-transparent hover:bg-[#111111]/2"
                               }`}
                             >
                               <div className="font-mono-tech text-xs space-y-1.5">
                                 <div className="flex items-center gap-2">
-                                  <span className="font-bold text-[#121212]">FIXTURE #{pos.fixtureId}</span>
+                                  <span className="font-bold text-[#111111]">FIXTURE #{pos.fixtureId}</span>
                                   <span className={`rounded border px-2 py-0.5 text-[9px] font-bold ${
                                     pos.agent === "Agent A" ? "bg-blue-50/50 text-[#235BFF] border-[#235BFF]/10" : "bg-purple-50/50 text-purple-700 border-purple-700/10"
                                   }`}>
                                     {pos.agent}
                                   </span>
                                 </div>
-                                <div className="text-[#121212] font-bold text-sm">{pos.fixtureName}</div>
-                                <div className="text-[10px] text-[#121212]/50">Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}</div>
+                                <div className="text-[#111111] font-bold text-sm">{pos.fixtureName}</div>
+                                <div className="text-[10px] text-[#111111]/50">Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}</div>
                               </div>
 
                               <div className="text-right font-mono-tech text-xs space-y-1.5 flex-shrink-0">
                                 <span className="rounded border border-[#0F8F67]/20 bg-green-50 text-[#0F8F67] px-2 py-0.5 text-[9px] font-bold">
                                   SETTLED
                                 </span>
-                                <div className="text-[9px] text-[#121212]/40">Click to audit path</div>
+                                <div className="text-[9px] text-[#111111]/40">Click to audit path</div>
                               </div>
                             </div>
                           ))}
@@ -1702,41 +1704,41 @@ export default function TradingDesk() {
                         if (!pos) return null;
                         return (
                           <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 space-y-6 font-mono-tech text-xs relative overflow-hidden text-left shadow-sm">
-                            <div className="absolute top-0 right-0 p-4 text-[9px] text-[#121212]/30 uppercase font-mono-tech">VERDICT VERIFY</div>
-                            <h4 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] border-b border-[#121212]/10 pb-3 uppercase">Oracle Proof Receipt</h4>
+                            <div className="absolute top-0 right-0 p-4 text-[9px] text-[#111111]/30 uppercase font-mono-tech">VERDICT VERIFY</div>
+                            <h4 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] border-b border-[#111111]/10 pb-3 uppercase">Oracle Proof Receipt</h4>
                             
                             <div className="space-y-4 text-left">
                               <div>
-                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Trade Contract ID</span>
-                                <span className="text-[#121212] font-bold">{pos.id}</span>
+                                <span className="text-[9px] text-[#111111]/40 uppercase block tracking-wider">Trade Contract ID</span>
+                                <span className="text-[#111111] font-bold">{pos.id}</span>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Validator Root (Epoch 20633)</span>
-                                <span className="text-[#121212]/70 select-all block break-all bg-[#121212]/2 p-3 border border-[#121212]/10 rounded-xl text-[10px]">
+                                <span className="text-[9px] text-[#111111]/40 uppercase block tracking-wider">Validator Root (Epoch 20633)</span>
+                                <span className="text-[#111111]/70 select-all block break-all bg-[#111111]/2 p-3 border border-[#111111]/10 rounded-xl text-[10px]">
                                   0x6d0429f5f0a904d2e9b152063c8c1df69ba90b9b30c1d68377b2be48fc8e5c3c
                                 </span>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Merkle Proof Nodes</span>
-                                <div className="text-[#121212]/50 bg-[#121212]/2 p-3 border border-[#121212]/10 rounded-xl space-y-1.5 text-[9px] tracking-normal">
+                                <span className="text-[9px] text-[#111111]/40 uppercase block tracking-wider">Merkle Proof Nodes</span>
+                                <div className="text-[#111111]/50 bg-[#111111]/2 p-3 border border-[#111111]/10 rounded-xl space-y-1.5 text-[9px] tracking-normal">
                                   <div>Node 0: 0x77b...c1d6 (Verified)</div>
                                   <div>Node 1: 0x30c...e8fc (Verified)</div>
                                 </div>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">State Outcomes Proven</span>
-                                <span className="text-[#121212] font-bold">Goals: 1.0 (Full Time)</span>
+                                <span className="text-[9px] text-[#111111]/40 uppercase block tracking-wider">State Outcomes Proven</span>
+                                <span className="text-[#111111] font-bold">Goals: 1.0 (Full Time)</span>
                               </div>
 
-                              <div className="pt-2 border-t border-[#121212]/10">
+                              <div className="pt-2 border-t border-[#111111]/10">
                                 <a
                                   href={`https://explorer.solana.com/tx/${pos.settleTxSignature}?cluster=devnet`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="w-full flex items-center justify-center gap-1.5 rounded-full border border-[#121212]/15 bg-transparent hover:bg-[#121212]/5 text-[#121212] py-4 transition-editorial text-center font-bold tracking-[0.1em]"
+                                  className="w-full flex items-center justify-center gap-1.5 rounded-full border border-[#111111]/15 bg-transparent hover:bg-[#111111]/5 text-[#111111] py-4 transition-editorial text-center font-bold tracking-[0.1em]"
                                 >
                                   <span>SOLANA CONTRACT</span>
                                   <ExternalLink className="h-3.5 w-3.5" strokeWidth={1} />
@@ -1747,8 +1749,8 @@ export default function TradingDesk() {
                         );
                       })()
                     ) : (
-                      <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 text-center text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase flex flex-col items-center justify-center min-h-[300px]">
-                        <Info className="h-5 w-5 text-[#121212]/20 mb-2" strokeWidth={1} />
+                      <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 text-center text-[#111111]/30 font-mono-tech text-[10px] tracking-wider uppercase flex flex-col items-center justify-center min-h-[300px]">
+                        <Info className="h-5 w-5 text-[#111111]/20 mb-2" strokeWidth={1} />
                         <span>Select a settled ledger contract to verify cryptographic proof.</span>
                       </div>
                     )}
@@ -1761,57 +1763,57 @@ export default function TradingDesk() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Parameter controls */}
                   <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
-                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase mb-6 border-b border-[#121212]/10 pb-3 flex items-center gap-2">
-                      <ShieldAlert className="h-4.5 w-4.5 text-[#121212]/80" strokeWidth={1} />
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase mb-6 border-b border-[#111111]/10 pb-3 flex items-center gap-2">
+                      <ShieldAlert className="h-4.5 w-4.5 text-[#111111]/80" strokeWidth={1} />
                       Circuit Breakers & Parameters
                     </h3>
                     
                     <form onSubmit={handleSaveSettings} className="space-y-5 font-mono-tech text-xs text-left">
                       <div>
-                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Z-Score Sensitivity Threshold (σ)</label>
+                        <label className="block text-[#111111]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Z-Score Sensitivity Threshold (σ)</label>
                         <input
                           type="number"
                           step="0.1"
                           value={zScoreThreshold}
                           onChange={(e) => setZScoreThreshold(e.target.value)}
-                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
+                          className="w-full rounded-xl border border-[#111111]/15 bg-[#111111]/2 px-3.5 py-3.5 text-[#111111] outline-none focus:border-[#111111] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Total Exposure Limit (USDT)</label>
+                        <label className="block text-[#111111]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Total Exposure Limit (USDT)</label>
                         <input
                           type="number"
                           value={maxTotalExposure}
                           onChange={(e) => setMaxTotalExposure(e.target.value)}
-                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
+                          className="w-full rounded-xl border border-[#111111]/15 bg-[#111111]/2 px-3.5 py-3.5 text-[#111111] outline-none focus:border-[#111111] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Positions Per Fixture</label>
+                        <label className="block text-[#111111]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Positions Per Fixture</label>
                         <input
                           type="number"
                           value={maxPositionsPerFixture}
                           onChange={(e) => setMaxPositionsPerFixture(e.target.value)}
-                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
+                          className="w-full rounded-xl border border-[#111111]/15 bg-[#111111]/2 px-3.5 py-3.5 text-[#111111] outline-none focus:border-[#111111] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Session Loss Shutdown (USDT)</label>
+                        <label className="block text-[#111111]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Session Loss Shutdown (USDT)</label>
                         <input
                           type="number"
                           value={maxSessionLoss}
                           onChange={(e) => setMaxSessionLoss(e.target.value)}
-                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
+                          className="w-full rounded-xl border border-[#111111]/15 bg-[#111111]/2 px-3.5 py-3.5 text-[#111111] outline-none focus:border-[#111111] font-bold"
                         />
                       </div>
 
                       <button
                         type="submit"
                         disabled={actionPending}
-                        className="w-full rounded-full bg-[#121212] hover:bg-black text-[#F5F2EB] font-bold py-4 transition-colors disabled:opacity-50 uppercase tracking-[0.15em]"
+                        className="w-full rounded-full bg-[#111111] hover:bg-black text-[#F5F2EB] font-bold py-4 transition-colors disabled:opacity-50 uppercase tracking-[0.15em]"
                       >
                         APPLY CIRCUIT CONFIGURATION
                       </button>
@@ -1820,22 +1822,22 @@ export default function TradingDesk() {
 
                   {/* Wallet management console */}
                   <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
-                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase mb-6 border-b border-[#121212]/10 pb-3 flex items-center gap-2">
-                      <DollarSign className="h-4.5 w-4.5 text-[#121212]/80" strokeWidth={1} />
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#111111] uppercase mb-6 border-b border-[#111111]/10 pb-3 flex items-center gap-2">
+                      <DollarSign className="h-4.5 w-4.5 text-[#111111]/80" strokeWidth={1} />
                       Agent Wallet Configuration
                     </h3>
                     
                     <div className="space-y-6 font-mono-tech text-xs text-left">
                       <div className="space-y-2">
-                        <span className="text-[#121212]/40 uppercase block font-bold tracking-[0.15em]">Agent A Address</span>
+                        <span className="text-[#111111]/40 uppercase block font-bold tracking-[0.15em]">Agent A Address</span>
                         <div className="flex items-center gap-2">
-                          <span className="bg-[#121212]/2 border border-[#121212]/15 rounded-xl px-3.5 py-3 text-[#121212]/80 font-bold select-all flex-1 truncate">
+                          <span className="bg-[#111111]/2 border border-[#111111]/15 rounded-xl px-3.5 py-3 text-[#111111]/80 font-bold select-all flex-1 truncate">
                             EwvSmry1ByU9PEqxPSsTLhQQATMeUqZiWBGsDvufCTdo
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent A")}
                             disabled={fundingAgent !== null}
-                            className="rounded-full border border-[#121212]/15 hover:bg-[#121212]/5 text-[#121212]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
+                            className="rounded-full border border-[#111111]/15 hover:bg-[#111111]/5 text-[#111111]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
                           >
                             {fundingAgent === "Agent A" ? "FUNDING..." : "AIRDROP"}
                           </button>
@@ -1843,25 +1845,25 @@ export default function TradingDesk() {
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[#121212]/40 uppercase block font-bold tracking-[0.15em]">Agent B Address</span>
+                        <span className="text-[#111111]/40 uppercase block font-bold tracking-[0.15em]">Agent B Address</span>
                         <div className="flex items-center gap-2">
-                          <span className="bg-[#121212]/2 border border-[#121212]/15 rounded-xl px-3.5 py-3 text-[#121212]/80 font-bold select-all flex-1 truncate">
+                          <span className="bg-[#111111]/2 border border-[#111111]/15 rounded-xl px-3.5 py-3 text-[#111111]/80 font-bold select-all flex-1 truncate">
                             41ac5tzvdc5z4BEv5suHmgC32sY2goaNDnTAvJ8gWAs7
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent B")}
                             disabled={fundingAgent !== null}
-                            className="rounded-full border border-[#121212]/15 hover:bg-[#121212]/5 text-[#121212]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
+                            className="rounded-full border border-[#111111]/15 hover:bg-[#111111]/5 text-[#111111]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
                           >
                             {fundingAgent === "Agent B" ? "FUNDING..." : "AIRDROP"}
                           </button>
                         </div>
                       </div>
 
-                      <div className="rounded-xl bg-[#121212]/2 border border-[#121212]/5 p-4 text-[#121212]/50 flex gap-3">
-                        <Info className="h-4.5 w-4.5 text-[#121212]/60 flex-shrink-0 mt-0.5" strokeWidth={1} />
+                      <div className="rounded-xl bg-[#111111]/2 border border-[#111111]/5 p-4 text-[#111111]/50 flex gap-3">
+                        <Info className="h-4.5 w-4.5 text-[#111111]/60 flex-shrink-0 mt-0.5" strokeWidth={1} />
                         <p className="leading-relaxed text-[10px] font-light">
-                          Keypair storage linkage matches configuration file <code className="text-[#121212] font-bold">wallets.json</code>. Airdrop calls direct devnet SOL faucet injection and simulated USDT balance allocation.
+                          Keypair storage linkage matches configuration file <code className="text-[#111111] font-bold">wallets.json</code>. Airdrop calls direct devnet SOL faucet injection and simulated USDT balance allocation.
                         </p>
                       </div>
                     </div>
@@ -1873,7 +1875,7 @@ export default function TradingDesk() {
 
           {/* Floating toast notification */}
           {newSignalAlert && (
-            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border border-[#235BFF]/30 bg-[#F5F2EB] p-4 shadow-xl font-mono-tech text-xs text-[#121212] border-editorial">
+            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border border-[#235BFF]/30 bg-[#F5F2EB] p-4 shadow-xl font-mono-tech text-xs text-[#111111] border-editorial">
               <Activity className="h-4 w-4 animate-spin text-[#235BFF]" strokeWidth={1.5} />
               <span>{newSignalAlert}</span>
             </div>
