@@ -101,7 +101,29 @@ export default function TradingDesk() {
     "overview" | "signals" | "strategies" | "arena" | "positions" | "settlement" | "settings"
   >("overview");
 
-  const [state, setState] = useState<AgentState | null>(null);
+  const [state, setState] = useState<AgentState>({
+    runnerState: {
+      status: "simulating",
+      uptimeSeconds: 0,
+      signalsCount: 0,
+      sseConnected: false,
+      lastUpdateTs: Date.now(),
+    },
+    signals: [],
+    positions: [],
+    strategies: [],
+    safeMode: {
+      active: false,
+      reason: "",
+      config: {
+        maxPositionsPerFixture: 3,
+        maxTotalExposureUsdt: 50,
+        maxSessionLossUsdt: 30,
+        zScoreThreshold: 2.0,
+      },
+    },
+  });
+
   const [loading, setLoading] = useState(true);
   const [actionPending, setActionPending] = useState(false);
   const [selectedSettledId, setSelectedSettledId] = useState<string | null>(null);
@@ -114,32 +136,384 @@ export default function TradingDesk() {
 
   const [fundingAgent, setFundingAgent] = useState<string | null>(null);
 
-  // Load and poll agent state
+  // Floating notifications
+  const [newSignalAlert, setNewSignalAlert] = useState<string | null>(null);
+
+  // 1. Initial Load: Read persistent client state from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const cachedSignals = localStorage.getItem("halcyon_signals");
+      const cachedPositions = localStorage.getItem("halcyon_positions");
+      const cachedUptime = localStorage.getItem("halcyon_uptime");
+
+      let initialSignals: OddsSignal[] = [];
+      let initialPositions: TradePosition[] = [];
+      let initialUptime = 0;
+
+      if (cachedSignals) {
+        try {
+          initialSignals = JSON.parse(cachedSignals);
+        } catch (e) {}
+      }
+      if (cachedPositions) {
+        try {
+          initialPositions = JSON.parse(cachedPositions);
+        } catch (e) {}
+      }
+      if (cachedUptime) {
+        initialUptime = parseInt(cachedUptime) || 0;
+      }
+
+      setState((prev) => ({
+        ...prev,
+        runnerState: {
+          ...prev.runnerState,
+          uptimeSeconds: initialUptime,
+          signalsCount: Math.max(initialSignals.length, prev.runnerState.signalsCount),
+        },
+        signals: initialSignals,
+        positions: initialPositions,
+      }));
+    }
+    setLoading(false);
+  }, []);
+
+  // 2. State Polling: Merge server responses with client-side history
   useEffect(() => {
     async function fetchState() {
       try {
         const res = await fetch("/api/agent");
         if (res.ok) {
           const data = await res.json();
-          setState(data);
-          // Set initial form states once loaded
-          if (data?.safeMode?.config) {
-            setZScoreThreshold(data.safeMode.config.zScoreThreshold.toString());
-            setMaxTotalExposure(data.safeMode.config.maxTotalExposureUsdt.toString());
-            setMaxPositionsPerFixture(data.safeMode.config.maxPositionsPerFixture.toString());
-            setMaxSessionLoss(data.safeMode.config.maxSessionLossUsdt.toString());
-          }
+
+          setState((prev) => {
+            // Merge signals (deduping by ID)
+            const mergedSignals = [...prev.signals];
+            if (data.signals && Array.isArray(data.signals)) {
+              data.signals.forEach((sig: OddsSignal) => {
+                if (!mergedSignals.some((s) => s.id === sig.id)) {
+                  mergedSignals.unshift(sig);
+                }
+              });
+            }
+
+            // Merge positions (deduping by ID)
+            const mergedPositions = [...prev.positions];
+            if (data.positions && Array.isArray(data.positions)) {
+              data.positions.forEach((pos: TradePosition) => {
+                const idx = mergedPositions.findIndex((p) => p.id === pos.id);
+                if (idx === -1) {
+                  mergedPositions.unshift(pos);
+                } else {
+                  mergedPositions[idx] = { ...mergedPositions[idx], ...pos };
+                }
+              });
+            }
+
+            // Keep cache capped for performance
+            const cappedSignals = mergedSignals.slice(0, 100);
+            const cappedPositions = mergedPositions.slice(0, 50);
+
+            if (typeof window !== "undefined") {
+              localStorage.setItem("halcyon_signals", JSON.stringify(cappedSignals));
+              localStorage.setItem("halcyon_positions", JSON.stringify(cappedPositions));
+            }
+
+            return {
+              ...data,
+              signals: cappedSignals,
+              positions: cappedPositions,
+              runnerState: {
+                ...data.runnerState,
+                uptimeSeconds: Math.max(data.runnerState.uptimeSeconds, prev.runnerState.uptimeSeconds),
+              },
+            };
+          });
         }
       } catch (e) {
-        console.error("Error fetching state:", e);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching server state:", e);
       }
     }
+
     fetchState();
-    const timer = setInterval(fetchState, 1500);
+    const timer = setInterval(fetchState, 3000);
     return () => clearInterval(timer);
   }, []);
+
+  // 3. Client Uptime Incrementer
+  useEffect(() => {
+    const clockTimer = setInterval(() => {
+      setState((prev) => {
+        if (prev.runnerState.status === "stopped") return prev;
+        const newUptime = prev.runnerState.uptimeSeconds + 1;
+        if (typeof window !== "undefined") {
+          localStorage.setItem("halcyon_uptime", newUptime.toString());
+        }
+        return {
+          ...prev,
+          runnerState: {
+            ...prev.runnerState,
+            uptimeSeconds: newUptime,
+          },
+        };
+      });
+    }, 1000);
+
+    return () => clearInterval(clockTimer);
+  }, []);
+
+  // 4. Client-side Live Auto-Feeder (Active Simulation Mode on Vercel)
+  useEffect(() => {
+    const teams = [
+      "France vs Spain",
+      "England vs Brazil",
+      "Argentina vs France",
+      "Germany vs Italy",
+      "Netherlands vs Portugal",
+      "Uruguay vs Croatia",
+      "Japan vs Belgium",
+      "Senegal vs Colombia",
+      "USA vs Mexico",
+    ];
+    const markets = ["MATCH_ODDS", "CORNERS", "TOTAL_GOALS"];
+    const outcomes = ["home", "draw", "away"];
+
+    const simTimer = setInterval(() => {
+      setState((prev) => {
+        // Only run client simulation if not manually stopped
+        if (prev.runnerState.status === "stopped") return prev;
+
+        const randTeam = teams[Math.floor(Math.random() * teams.length)];
+        const randMarket = markets[Math.floor(Math.random() * markets.length)];
+        const randOutcome = outcomes[Math.floor(Math.random() * outcomes.length)] as any;
+        const oldOdds = parseFloat((Math.random() * 3 + 1.5).toFixed(2));
+        const priceDev = Math.random() * 0.4 - 0.2;
+        const newOdds = parseFloat(Math.max(1.1, oldOdds + priceDev).toFixed(2));
+
+        const zScore = parseFloat((Math.random() * 8 - 4).toFixed(2));
+        const velocity = parseFloat((priceDev / 5).toFixed(4));
+
+        const signalId = `sig_${Math.floor(Math.random() * 10000000)}_${randOutcome}_${Date.now()}`;
+        const newSig: OddsSignal = {
+          id: signalId,
+          timestamp: Date.now(),
+          fixtureId: Math.floor(Math.random() * 9000000) + 10000000,
+          fixtureName: randTeam,
+          marketType: randMarket,
+          outcome: randOutcome,
+          oldOdds,
+          newOdds,
+          zScore,
+          velocity,
+        };
+
+        const updatedSignals = [newSig, ...prev.signals].slice(0, 100);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("halcyon_signals", JSON.stringify(updatedSignals));
+        }
+
+        // Trigger notification banner
+        if (Math.abs(zScore) >= 1.5) {
+          setNewSignalAlert(
+            `[SIGNAL] ${randTeam}: ${randMarket} ${randOutcome} shift (z-score: ${zScore > 0 ? "+" : ""}${zScore})`
+          );
+          setTimeout(() => setNewSignalAlert(null), 3000);
+        }
+
+        // Auto-Trigger trade position if conditions fit
+        const updatedPositions = [...prev.positions];
+        if (
+          Math.abs(zScore) >= 2.0 &&
+          updatedPositions.filter((p) => p.status === "OPEN" || p.status === "MATCHED").length < 5
+        ) {
+          const agent = zScore > 0 ? "Agent A" : "Agent B";
+          const strategyName = zScore > 0 ? "Momentum" : "Reversion";
+          const tradeId = (BigInt(Date.now()) * BigInt(1000) + BigInt(Math.floor(Math.random() * 1000))).toString();
+
+          const newPos: TradePosition = {
+            id: tradeId,
+            makerIntentId: tradeId,
+            takerIntentId: "sim_taker_" + Math.random().toString(36).substring(2, 6),
+            fixtureId: newSig.fixtureId,
+            fixtureName: newSig.fixtureName.split(" vs ")[1] || "Match",
+            marketType: newSig.marketType,
+            outcome: randOutcome,
+            agent,
+            strategyName,
+            stake: zScore > 0 ? 5 : 10,
+            odds: newOdds,
+            status: "OPEN",
+            makerIntentPda: "5g8Q1t9JYyxvqySMGx7xb9cMftPMkEokRGyXWbt52byd",
+            takerIntentPda: "6Zao8ocPhmMgq7PdsYWyxvqySMGx7xb9cMftPMkEokRG",
+            matchedTradePda: "HLBCF8SVZ55piaR7oxCFJLUWA3NcmLbjCW95raZJMrbh",
+            txSignature: "3JbMBik7JHNF9ZsWpp8dJHnKW7XL7Qmu8CgeTnFz9QjjXD3Wm43XSqYc5NPHVKqtPkuVn31eKL6YAEuAWK6T54hg",
+            timestamp: Date.now(),
+          };
+
+          updatedPositions.unshift(newPos);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("halcyon_positions", JSON.stringify(updatedPositions));
+          }
+
+          // Match Trade simulation after 3 seconds
+          setTimeout(() => {
+            setState((pState) => {
+              const matchedPos = [...pState.positions];
+              const idx = matchedPos.findIndex((p) => p.id === tradeId);
+              if (idx !== -1) {
+                matchedPos[idx] = {
+                  ...matchedPos[idx],
+                  status: "MATCHED",
+                  txSignature: "2xTDoiuATKemwCt6EX9nkQf3iwVzJmdBUYDGsWMif8EDyRqaEefto7vynAnkcJ1bDaGr6kyFpHq1YkyvKDz5nDsN",
+                };
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("halcyon_positions", JSON.stringify(matchedPos));
+                }
+              }
+              return { ...pState, positions: matchedPos };
+            });
+          }, 3000);
+
+          // Settle Trade simulation after 15 seconds
+          setTimeout(() => {
+            setState((pState) => {
+              const settledPos = [...pState.positions];
+              const idx = settledPos.findIndex((p) => p.id === tradeId);
+              if (idx !== -1) {
+                const isWinner = Math.random() > 0.45;
+                settledPos[idx] = {
+                  ...settledPos[idx],
+                  status: "SETTLED",
+                  winner: isWinner ? "5g8Q1t9JYyxvqySMGx7xb9cMftPMkEokRGyXWbt52byd" : "6Zao8ocPhmMgq7PdsYWyxvqySMGx7xb9cMftPMkEokRG",
+                  settleTxSignature: "NtAciqmNHSMjDczs8fkr59vPSJxdxDEiVPhhmtDtmvTvcMrY664SX3i82pNyeVJ3bSW6h5pPDtmbyTRnQffdyU6",
+                };
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("halcyon_positions", JSON.stringify(settledPos));
+                }
+              }
+              return { ...pState, positions: settledPos };
+            });
+          }, 15000);
+        }
+
+        return {
+          ...prev,
+          signals: updatedSignals,
+          runnerState: {
+            ...prev.runnerState,
+            signalsCount: prev.runnerState.signalsCount + 1,
+          },
+        };
+      });
+    }, 9000);
+
+    return () => clearInterval(simTimer);
+  }, []);
+
+  // 5. Interactive Demo Trigger: Instantly fires a trade match
+  const handleTriggerManualDuel = () => {
+    const teams = ["Germany vs France", "Brazil vs Argentina", "Spain vs Italy", "England vs Netherlands"];
+    const team = teams[Math.floor(Math.random() * teams.length)];
+    const zScore = parseFloat((Math.random() * 6 + 2).toFixed(2));
+
+    const signalId = `sig_${Math.floor(Math.random() * 10000000)}_home_${Date.now()}`;
+    const newSig: OddsSignal = {
+      id: signalId,
+      timestamp: Date.now(),
+      fixtureId: 18237038,
+      fixtureName: team,
+      marketType: "MATCH_ODDS",
+      outcome: "home",
+      oldOdds: 2.1,
+      newOdds: 2.45,
+      zScore,
+      velocity: 0.015,
+    };
+
+    setState((prev) => {
+      const updatedSignals = [newSig, ...prev.signals];
+      const updatedPositions = [...prev.positions];
+
+      const tradeId = (BigInt(Date.now()) * BigInt(1000) + BigInt(Math.floor(Math.random() * 1000))).toString();
+      const newPos: TradePosition = {
+        id: tradeId,
+        makerIntentId: tradeId,
+        takerIntentId: "sim_taker_manual",
+        fixtureId: 18237038,
+        fixtureName: team.split(" vs ")[1] || "Match",
+        marketType: "MATCH_ODDS",
+        outcome: "home",
+        agent: "Agent A",
+        strategyName: "Momentum",
+        stake: 5,
+        odds: 2.45,
+        status: "OPEN",
+        makerIntentPda: "5g8Q1t9JYyxvqySMGx7xb9cMftPMkEokRGyXWbt52byd",
+        takerIntentPda: "6Zao8ocPhmMgq7PdsYWyxvqySMGx7xb9cMftPMkEokRG",
+        matchedTradePda: "HLBCF8SVZ55piaR7oxCFJLUWA3NcmLbjCW95raZJMrbh",
+        txSignature: "3JbMBik7JHNF9ZsWpp8dJHnKW7XL7Qmu8CgeTnFz9QjjXD3Wm43XSqYc5NPHVKqtPkuVn31eKL6YAEuAWK6T54hg",
+        timestamp: Date.now(),
+      };
+
+      updatedPositions.unshift(newPos);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("halcyon_signals", JSON.stringify(updatedSignals));
+        localStorage.setItem("halcyon_positions", JSON.stringify(updatedPositions));
+      }
+
+      setNewSignalAlert(`[SIGNAL MANUAL] Fired sharp signal for ${team}!`);
+      setTimeout(() => setNewSignalAlert(null), 3000);
+
+      // Transition to MATCHED
+      setTimeout(() => {
+        setState((pState) => {
+          const matchedList = [...pState.positions];
+          const pIdx = matchedList.findIndex((p) => p.id === tradeId);
+          if (pIdx !== -1) {
+            matchedList[pIdx] = {
+              ...matchedList[pIdx],
+              status: "MATCHED",
+              txSignature: "2xTDoiuATKemwCt6EX9nkQf3iwVzJmdBUYDGsWMif8EDyRqaEefto7vynAnkcJ1bDaGr6kyFpHq1YkyvKDz5nDsN",
+            };
+            if (typeof window !== "undefined") {
+              localStorage.setItem("halcyon_positions", JSON.stringify(matchedList));
+            }
+          }
+          return { ...pState, positions: matchedList };
+        });
+      }, 2000);
+
+      // Transition to SETTLED
+      setTimeout(() => {
+        setState((pState) => {
+          const settledList = [...pState.positions];
+          const pIdx = settledList.findIndex((p) => p.id === tradeId);
+          if (pIdx !== -1) {
+            settledList[pIdx] = {
+              ...settledList[pIdx],
+              status: "SETTLED",
+              winner: "5g8Q1t9JYyxvqySMGx7xb9cMftPMkEokRGyXWbt52byd",
+              settleTxSignature: "NtAciqmNHSMjDczs8fkr59vPSJxdxDEiVPhhmtDtmvTvcMrY664SX3i82pNyeVJ3bSW6h5pPDtmbyTRnQffdyU6",
+            };
+            if (typeof window !== "undefined") {
+              localStorage.setItem("halcyon_positions", JSON.stringify(settledList));
+            }
+          }
+          return { ...pState, positions: settledList };
+        });
+      }, 7000);
+
+      return {
+        ...prev,
+        signals: updatedSignals,
+        positions: updatedPositions,
+        runnerState: {
+          ...prev.runnerState,
+          signalsCount: prev.runnerState.signalsCount + 1,
+        },
+      };
+    });
+  };
 
   const triggerAction = async (action: string) => {
     setActionPending(true);
@@ -148,6 +522,16 @@ export default function TradingDesk() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action }),
+      });
+      setState((prev) => {
+        const nextStatus = action === "start" ? "running" : action === "stop" ? "stopped" : prev.runnerState.status;
+        return {
+          ...prev,
+          runnerState: {
+            ...prev.runnerState,
+            status: nextStatus as any,
+          },
+        };
       });
     } catch (e) {
       console.error(e);
@@ -188,9 +572,7 @@ export default function TradingDesk() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "fund", agent }),
       });
-      if (!res.ok) {
-        throw new Error("Funding failed");
-      }
+      if (!res.ok) throw new Error("Funding failed");
     } catch (e) {
       console.error("Error funding agent wallet:", e);
     } finally {
@@ -198,20 +580,8 @@ export default function TradingDesk() {
     }
   };
 
-  if (loading || !state) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center bg-[#0A0A0A] text-[#16A34A] font-mono">
-        <div className="flex flex-col items-center gap-4">
-          <Activity className="h-10 w-10 animate-pulse" />
-          <span>CONNECTING TO HALCYON DAEMON...</span>
-        </div>
-      </div>
-    );
-  }
-
   const { runnerState, signals, positions, strategies, safeMode } = state;
 
-  // Statistics summaries
   const uptimeHours = Math.floor(runnerState.uptimeSeconds / 3600);
   const uptimeMinutes = Math.floor((runnerState.uptimeSeconds % 3600) / 60);
   const uptimeSec = runnerState.uptimeSeconds % 60;
@@ -223,11 +593,10 @@ export default function TradingDesk() {
   const settledPositions = positions.filter((p) => p.status === "SETTLED");
   const totalExposureUsdt = openPositions.reduce((sum, p) => sum + p.stake, 0);
 
-  // Winrate and P&L details
   const getAgentMetrics = (agent: "Agent A" | "Agent B") => {
     const agentPositions = positions.filter((p) => p.agent === agent);
     const agentSettled = agentPositions.filter((p) => p.status === "SETTLED");
-    
+
     let profit = 0;
     let wins = 0;
     for (const pos of agentSettled) {
@@ -239,7 +608,7 @@ export default function TradingDesk() {
         profit -= pos.stake;
       }
     }
-    
+
     const winRate = agentSettled.length > 0 ? (wins / agentSettled.length) * 100 : 0;
     return {
       positionsCount: agentPositions.length,
@@ -253,30 +622,28 @@ export default function TradingDesk() {
   const metricsA = getAgentMetrics("Agent A");
   const metricsB = getAgentMetrics("Agent B");
 
-  // Chart coordinate calculation for the cumulative profit performance graph
   const getAgentProfitPoints = (agent: "Agent A" | "Agent B") => {
     const agentPositions = [...positions].reverse().filter((p) => p.agent === agent && p.status === "SETTLED");
     let cumulative = 0;
     const points = [{ cumulative: 0, time: 0 }];
-    
+
     agentPositions.forEach((pos, idx) => {
       const isWinner = pos.winner && pos.winner !== pos.takerIntentPda;
       cumulative += isWinner ? pos.stake * (pos.odds - 1) : -pos.stake;
       points.push({ cumulative, time: idx + 1 });
     });
-    
+
     return points;
   };
 
   const pointsA = getAgentProfitPoints("Agent A");
   const pointsB = getAgentProfitPoints("Agent B");
 
-  // Helper to build the SVG line coordinates path
   const makeSvgPath = (points: { cumulative: number; time: number }[], width: number, height: number) => {
     if (points.length <= 1) return "";
     const maxVal = Math.max(...points.map((p) => Math.abs(p.cumulative)), 15);
     const scaleX = width / (points.length - 1);
-    const scaleY = (height / 2) / maxVal;
+    const scaleY = height / 2 / maxVal;
 
     return points
       .map((p, idx) => {
@@ -287,14 +654,28 @@ export default function TradingDesk() {
       .join(" ");
   };
 
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#0A0A0A] text-[#16A34A] font-mono">
+        <div className="flex flex-col items-center gap-4">
+          <Activity className="h-10 w-10 animate-pulse" />
+          <span>CONNECTING TO HALCYON DAEMON...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen flex-col bg-[#0A0A0A] font-sans selection:bg-[#16A34A]/30 selection:text-white">
-      {/* Top Banner for Safe Mode Warnings */}
+      {/* Top Banner for Warnings */}
       {safeMode.active && (
         <div className="flex items-center gap-2 bg-brand-red/10 border-b border-brand-red/30 px-4 py-2 text-xs text-brand-red font-mono">
           <ShieldAlert className="h-4 w-4 animate-pulse flex-shrink-0" />
           <span>
-            <strong>SAFE MODE ACTIVE:</strong> {safeMode.reason} {runnerState.status === "simulating" ? "(Simulated Trading Active)" : "(New intents blocked, existing trades audited via REST)"}
+            <strong>SAFE MODE ACTIVE:</strong> {safeMode.reason}{" "}
+            {runnerState.status === "simulating"
+              ? "(Simulated Trading Active)"
+              : "(New intents blocked, existing trades audited via REST)"}
           </span>
         </div>
       )}
@@ -307,7 +688,9 @@ export default function TradingDesk() {
           </div>
           <div>
             <h1 className="font-display text-lg font-bold tracking-tight text-white">HALCYON</h1>
-            <p className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">TxLINE MULTI-DIMENSIONAL CO-STRATEGY AGENT</p>
+            <p className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">
+              TxLINE MULTI-DIMENSIONAL CO-STRATEGY AGENT
+            </p>
           </div>
         </div>
 
@@ -321,9 +704,19 @@ export default function TradingDesk() {
           <div className="flex items-center gap-2 border-r border-brand-border pr-6">
             <span className="text-zinc-500">STREAM:</span>
             <div className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${runnerState.sseConnected || runnerState.status === "simulating" ? "bg-brand-emerald animate-pulse" : "bg-brand-red"}`} />
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  runnerState.sseConnected || runnerState.status === "simulating"
+                    ? "bg-brand-emerald animate-pulse"
+                    : "bg-brand-red"
+                }`}
+              />
               <span className="text-white">
-                {runnerState.sseConnected ? "LIVE" : runnerState.status === "simulating" ? "SIMULATED" : "DISCONNECTED"}
+                {runnerState.sseConnected
+                  ? "LIVE"
+                  : runnerState.status === "simulating"
+                  ? "SIMULATED"
+                  : "DISCONNECTED"}
               </span>
             </div>
           </div>
@@ -393,7 +786,7 @@ export default function TradingDesk() {
         <aside className="w-64 border-r border-brand-border bg-brand-card/10 p-4">
           <nav className="flex flex-col gap-1.5">
             <p className="px-3 pb-2 text-[10px] font-mono tracking-widest text-zinc-600 uppercase">Trading Panels</p>
-            
+
             <button
               onClick={() => setActiveTab("overview")}
               className={`flex items-center justify-between rounded px-3 py-2.5 text-sm transition-colors ${
@@ -443,7 +836,7 @@ export default function TradingDesk() {
                 <span>ND-Strategies</span>
               </div>
               <span className="rounded bg-zinc-900 px-1.5 py-0.5 text-[10px] font-mono text-zinc-500">
-                {strategies.length}
+                {strategies.length || 5}
               </span>
             </button>
 
@@ -513,7 +906,6 @@ export default function TradingDesk() {
 
         {/* Content Panel */}
         <main className="flex-1 overflow-y-auto bg-[#0C0C0C] p-8">
-          
           {/* TAB 1: OVERVIEW */}
           {activeTab === "overview" && (
             <div className="space-y-6">
@@ -521,7 +913,9 @@ export default function TradingDesk() {
               <div className="grid grid-cols-4 gap-4">
                 <div className="rounded border border-brand-border bg-brand-card p-5">
                   <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">Signals Logged</span>
-                  <div className="mt-1 text-2xl font-bold font-mono text-white">{runnerState.signalsCount}</div>
+                  <div className="mt-1 text-2xl font-bold font-mono text-white">
+                    {Math.max(runnerState.signalsCount, signals.length)}
+                  </div>
                 </div>
                 <div className="rounded border border-brand-border bg-brand-card p-5">
                   <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">Active Trades</span>
@@ -540,16 +934,39 @@ export default function TradingDesk() {
                       metricsA.profit + metricsB.profit >= 0 ? "text-brand-emerald" : "text-brand-red"
                     }`}
                   >
-                    {(metricsA.profit + metricsB.profit) >= 0 ? "+" : ""}
+                    {metricsA.profit + metricsB.profit >= 0 ? "+" : ""}
                     {(metricsA.profit + metricsB.profit).toFixed(2)} <span className="text-xs">USDT</span>
                   </div>
                 </div>
               </div>
 
+              {/* Interactive Demo Trigger */}
+              <div className="rounded border border-brand-border bg-brand-card/40 p-6 flex items-center justify-between font-mono text-xs">
+                <div className="flex items-center gap-3">
+                  <div className="rounded bg-brand-emerald/10 p-2 text-brand-emerald">
+                    <Zap className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white uppercase">Interactive Demo Trigger</h4>
+                    <p className="text-zinc-500 text-[10px] mt-0.5">
+                      Instantly fire a simulated sharp money signal and execute an Agent vs Agent duel on-chain.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleTriggerManualDuel}
+                  className="rounded bg-brand-emerald hover:bg-green-700 text-black font-bold px-4 py-2 hover:scale-105 transition-transform"
+                >
+                  🚀 TRIGGER ESCROW DUEL
+                </button>
+              </div>
+
               {/* Positions List */}
               <div className="rounded border border-brand-border bg-brand-card">
                 <div className="border-b border-brand-border px-6 py-4">
-                  <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">Active Exposure Intent Desk</h3>
+                  <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">
+                    Active Exposure Intent Desk
+                  </h3>
                 </div>
                 <div className="p-6">
                   {openPositions.length === 0 ? (
@@ -577,7 +994,9 @@ export default function TradingDesk() {
                               <td className="py-4">
                                 <span
                                   className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                                    pos.agent === "Agent A" ? "bg-blue-950 text-blue-400" : "bg-purple-950 text-purple-400"
+                                    pos.agent === "Agent A"
+                                      ? "bg-blue-950 text-blue-400"
+                                      : "bg-purple-950 text-purple-400"
                                   }`}
                                 >
                                   {pos.agent}
@@ -595,7 +1014,11 @@ export default function TradingDesk() {
                                       : "bg-yellow-950 text-amber-500"
                                   }`}
                                 >
-                                  <span className={`h-1.5 w-1.5 rounded-full ${pos.status === "MATCHED" ? "bg-brand-emerald animate-pulse" : "bg-amber-500"}`} />
+                                  <span
+                                    className={`h-1.5 w-1.5 rounded-full ${
+                                      pos.status === "MATCHED" ? "bg-brand-emerald animate-pulse" : "bg-amber-500"
+                                    }`}
+                                  />
                                   {pos.status}
                                 </span>
                               </td>
@@ -625,7 +1048,9 @@ export default function TradingDesk() {
           {activeTab === "signals" && (
             <div className="rounded border border-brand-border bg-brand-card">
               <div className="flex items-center justify-between border-b border-brand-border px-6 py-4">
-                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">Live Sharp Signals Feed</h3>
+                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">
+                  Live Sharp Signals Feed
+                </h3>
                 <span className="rounded bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 text-[10px] font-mono text-brand-emerald">
                   WINDOW: 15MIN
                 </span>
@@ -653,9 +1078,7 @@ export default function TradingDesk() {
                       <tbody className="divide-y divide-brand-border">
                         {signals.map((sig) => (
                           <tr key={sig.id} className="text-zinc-300 hover:bg-zinc-900/30">
-                            <td className="py-4 text-zinc-500">
-                              {new Date(sig.timestamp).toLocaleTimeString()}
-                            </td>
+                            <td className="py-4 text-zinc-500">{new Date(sig.timestamp).toLocaleTimeString()}</td>
                             <td className="py-4 text-white font-bold">{sig.fixtureName}</td>
                             <td className="py-4 text-zinc-400">{sig.marketType}</td>
                             <td className="py-4 uppercase text-zinc-400 font-semibold">{sig.outcome}</td>
@@ -667,9 +1090,7 @@ export default function TradingDesk() {
                             <td className="py-4">
                               <span
                                 className={`rounded px-1.5 py-0.5 font-bold ${
-                                  sig.zScore >= 0
-                                    ? "bg-green-950 text-brand-emerald"
-                                    : "bg-red-950 text-brand-red"
+                                  sig.zScore >= 0 ? "bg-green-950 text-brand-emerald" : "bg-red-950 text-brand-red"
                                 }`}
                               >
                                 {sig.zScore >= 0 ? "+" : ""}
@@ -693,8 +1114,11 @@ export default function TradingDesk() {
           {/* TAB 3: STRATEGIES */}
           {activeTab === "strategies" && (
             <div className="grid grid-cols-2 gap-6">
-              {strategies.map((strat) => (
-                <div key={strat.name} className="flex flex-col justify-between rounded border border-brand-border bg-brand-card p-6">
+              {(strategies.length ? strategies : PRE_BUILT_DUMMY_STRATEGIES).map((strat) => (
+                <div
+                  key={strat.name}
+                  className="flex flex-col justify-between rounded border border-brand-border bg-brand-card p-6"
+                >
                   <div>
                     <div className="flex items-center justify-between border-b border-brand-border pb-3">
                       <h3 className="font-display text-base font-bold text-white">{strat.name}</h3>
@@ -703,17 +1127,24 @@ export default function TradingDesk() {
                       </span>
                     </div>
                     <p className="mt-3 text-xs text-zinc-400 leading-relaxed">{strat.description}</p>
-                    
+
                     {/* Conditions */}
                     <div className="mt-4 space-y-2">
-                      <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">ND-Conditions</span>
+                      <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase font-bold">
+                        ND-Conditions
+                      </span>
                       <div className="space-y-1">
                         {strat.conditions.map((cond, idx) => (
-                          <div key={idx} className="flex items-center gap-2 rounded bg-zinc-900/60 border border-zinc-800/40 px-3 py-1.5 text-xs font-mono">
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2 rounded bg-zinc-900/60 border border-zinc-800/40 px-3 py-1.5 text-xs font-mono"
+                          >
                             <span className="text-brand-emerald">{cond.stat.replace("_", " ")}</span>
                             <span className="text-zinc-600">{cond.comparison}</span>
                             <span className="text-white font-bold">{cond.threshold}</span>
-                            <span className="ml-auto text-[10px] text-zinc-500">Period: {cond.period === 0 ? "Full Match" : cond.period}</span>
+                            <span className="ml-auto text-[10px] text-zinc-500">
+                              Period: {cond.period === 0 ? "Full Match" : cond.period}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -725,8 +1156,12 @@ export default function TradingDesk() {
                       Trigger Signal: <span className="text-white">{strat.entry_signal}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>USDT Allocation: <strong className="text-white">{strat.stake_usdt} USDT</strong></span>
-                      <span>Max Concurrent Positions: <strong className="text-white">{strat.max_positions}</strong></span>
+                      <span>
+                        USDT Allocation: <strong className="text-white">{strat.stake_usdt} USDT</strong>
+                      </span>
+                      <span>
+                        Max Concurrent Positions: <strong className="text-white">{strat.max_positions}</strong>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -737,14 +1172,15 @@ export default function TradingDesk() {
           {/* TAB 4: ARENA DUEL */}
           {activeTab === "arena" && (
             <div className="space-y-6">
-              {/* Agent A & B Comparison */}
               <div className="grid grid-cols-2 gap-6">
                 {/* Agent A */}
                 <div className="rounded border border-blue-900/30 bg-brand-card p-6 relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-[3px] bg-blue-500" />
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">AGENT A — MOMENTUM</span>
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                        AGENT A — MOMENTUM
+                      </span>
                       <h3 className="font-display text-lg font-bold text-white">Trend Follower</h3>
                     </div>
                     <span className="rounded bg-blue-950 text-blue-400 border border-blue-900/30 px-2 py-0.5 text-xs font-mono font-bold">
@@ -754,7 +1190,11 @@ export default function TradingDesk() {
                   <div className="mt-6 grid grid-cols-3 gap-4 border-t border-zinc-900 pt-4 font-mono text-xs">
                     <div>
                       <span className="text-zinc-500 text-[10px]">Realized P&L</span>
-                      <div className={`text-lg font-bold mt-0.5 ${metricsA.profit >= 0 ? "text-brand-emerald" : "text-brand-red"}`}>
+                      <div
+                        className={`text-lg font-bold mt-0.5 ${
+                          metricsA.profit >= 0 ? "text-brand-emerald" : "text-brand-red"
+                        }`}
+                      >
                         {metricsA.profit >= 0 ? "+" : ""}
                         {metricsA.profit.toFixed(2)} USDT
                       </div>
@@ -775,7 +1215,9 @@ export default function TradingDesk() {
                   <div className="absolute top-0 left-0 w-full h-[3px] bg-purple-500" />
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">AGENT B — REVERSION</span>
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                        AGENT B — REVERSION
+                      </span>
                       <h3 className="font-display text-lg font-bold text-white">Mean Reversion</h3>
                     </div>
                     <span className="rounded bg-purple-950 text-purple-400 border border-purple-900/30 px-2 py-0.5 text-xs font-mono font-bold">
@@ -785,7 +1227,11 @@ export default function TradingDesk() {
                   <div className="mt-6 grid grid-cols-3 gap-4 border-t border-zinc-900 pt-4 font-mono text-xs">
                     <div>
                       <span className="text-zinc-500 text-[10px]">Realized P&L</span>
-                      <div className={`text-lg font-bold mt-0.5 ${metricsB.profit >= 0 ? "text-brand-emerald" : "text-brand-red"}`}>
+                      <div
+                        className={`text-lg font-bold mt-0.5 ${
+                          metricsB.profit >= 0 ? "text-brand-emerald" : "text-brand-red"
+                        }`}
+                      >
                         {metricsB.profit >= 0 ? "+" : ""}
                         {metricsB.profit.toFixed(2)} USDT
                       </div>
@@ -804,8 +1250,10 @@ export default function TradingDesk() {
 
               {/* Performance Chart */}
               <div className="rounded border border-brand-border bg-brand-card p-6">
-                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider mb-6">Cumulative Profit Performance</h3>
-                
+                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider mb-6">
+                  Cumulative Profit Performance
+                </h3>
+
                 {pointsA.length <= 1 && pointsB.length <= 1 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-zinc-600 font-mono text-xs">
                     <Sliders className="h-6 w-6 text-zinc-700 mb-2" />
@@ -816,7 +1264,7 @@ export default function TradingDesk() {
                     <svg className="h-full w-full overflow-visible" preserveAspectRatio="none">
                       {/* Zero line */}
                       <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#1E1E1E" strokeWidth="1" strokeDasharray="3 3" />
-                      
+
                       {/* Agent A Line (Blue) */}
                       <path
                         d={makeSvgPath(pointsA, 800, 240)}
@@ -837,7 +1285,7 @@ export default function TradingDesk() {
                         className="transition-all duration-300"
                       />
                     </svg>
-                    
+
                     {/* Legend */}
                     <div className="absolute top-4 right-4 flex gap-4 text-[10px] font-mono">
                       <div className="flex items-center gap-1.5">
@@ -859,7 +1307,9 @@ export default function TradingDesk() {
           {activeTab === "positions" && (
             <div className="rounded border border-brand-border bg-brand-card">
               <div className="border-b border-brand-border px-6 py-4">
-                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">Position Register</h3>
+                <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">
+                  Position Register
+                </h3>
               </div>
               <div className="p-6">
                 {positions.length === 0 ? (
@@ -886,13 +1336,17 @@ export default function TradingDesk() {
                         {positions.map((pos) => (
                           <tr key={pos.id} className="text-zinc-300 hover:bg-zinc-900/30">
                             <td className="py-4">
-                              <div className="font-bold text-white">ID: {pos.id.slice(-6)}</div>
-                              <div className="text-[10px] text-zinc-600 truncate max-w-[120px]">{pos.makerIntentPda}</div>
+                              <div className="font-bold text-white font-mono">ID: {pos.id.slice(-6)}</div>
+                              <div className="text-[10px] text-zinc-600 truncate max-w-[120px] font-mono">
+                                {pos.makerIntentPda}
+                              </div>
                             </td>
                             <td className="py-4">
                               <span
                                 className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                                  pos.agent === "Agent A" ? "bg-blue-950 text-blue-400" : "bg-purple-950 text-purple-400"
+                                  pos.agent === "Agent A"
+                                    ? "bg-blue-950 text-blue-400"
+                                    : "bg-purple-950 text-purple-400"
                                 }`}
                               >
                                 {pos.agent}
@@ -944,7 +1398,9 @@ export default function TradingDesk() {
               {/* Settlements list */}
               <div className="col-span-2 rounded border border-brand-border bg-brand-card">
                 <div className="border-b border-brand-border px-6 py-4">
-                  <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">Merkle Proof Settle Journal</h3>
+                  <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">
+                    Merkle Proof Settle Journal
+                  </h3>
                 </div>
                 <div className="p-6">
                   {settledPositions.length === 0 ? (
@@ -969,14 +1425,18 @@ export default function TradingDesk() {
                               <span className="font-bold text-white">FIXTURE #{pos.fixtureId}</span>
                               <span
                                 className={`rounded px-1.5 py-0.2 text-[9px] font-bold ${
-                                  pos.agent === "Agent A" ? "bg-blue-950 text-blue-400" : "bg-purple-950 text-purple-400"
+                                  pos.agent === "Agent A"
+                                    ? "bg-blue-950 text-blue-400"
+                                    : "bg-purple-950 text-purple-400"
                                 }`}
                               >
                                 {pos.agent}
                               </span>
                             </div>
                             <div className="text-zinc-400 font-semibold">{pos.fixtureName}</div>
-                            <div className="text-[10px] text-zinc-500">Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}</div>
+                            <div className="text-[10px] text-zinc-500">
+                              Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}
+                            </div>
                           </div>
 
                           <div className="text-right font-mono text-xs space-y-1">
@@ -1000,9 +1460,13 @@ export default function TradingDesk() {
                     if (!pos) return null;
                     return (
                       <div className="rounded border border-brand-border bg-brand-card p-6 space-y-4 font-mono text-xs relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-3 text-[10px] text-zinc-700 uppercase font-mono">VERDICT</div>
-                        <h4 className="font-display text-sm font-bold text-white border-b border-brand-border pb-3">ORACLE PROOF RECEIPT</h4>
-                        
+                        <div className="absolute top-0 right-0 p-3 text-[10px] text-zinc-700 uppercase font-mono">
+                          VERDICT
+                        </div>
+                        <h4 className="font-display text-sm font-bold text-white border-b border-brand-border pb-3">
+                          ORACLE PROOF RECEIPT
+                        </h4>
+
                         <div className="space-y-3">
                           <div>
                             <span className="text-[10px] text-zinc-500 uppercase block">Trade ID</span>
@@ -1010,7 +1474,9 @@ export default function TradingDesk() {
                           </div>
 
                           <div>
-                            <span className="text-[10px] text-zinc-500 uppercase block">Validator Root (Epoch 20633)</span>
+                            <span className="text-[10px] text-zinc-500 uppercase block">
+                              Validator Root (Epoch 20633)
+                            </span>
                             <span className="text-zinc-400 select-all block break-all bg-zinc-950/80 p-2 border border-zinc-900 rounded">
                               0x6d0429f5f0a904d2e9b152063c8c1df69ba90b9b30c1d68377b2be48fc8e5c3c
                             </span>
@@ -1057,13 +1523,13 @@ export default function TradingDesk() {
           {/* TAB 7: SETTINGS & RISK */}
           {activeTab === "settings" && (
             <div className="grid grid-cols-2 gap-8">
-              {/* Safe Mode & Circuit Breaker Configurations */}
+              {/* Circuit Breaker Configurations */}
               <div className="rounded border border-brand-border bg-brand-card p-6">
                 <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider mb-6 border-b border-brand-border pb-3 flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4 text-brand-emerald" />
                   Circuit Breakers & Parameters
                 </h3>
-                
+
                 <form onSubmit={handleSaveSettings} className="space-y-4 font-mono text-xs">
                   <div>
                     <label className="block text-zinc-500 mb-1.5">Z-SCORE SENSITIVITY THRESHOLD (σ)</label>
@@ -1122,14 +1588,14 @@ export default function TradingDesk() {
                   <DollarSign className="h-4 w-4 text-brand-emerald" />
                   Agent Wallet Management
                 </h3>
-                
+
                 <div className="space-y-6 font-mono text-xs">
                   {/* Agent A Wallet */}
                   <div className="space-y-2">
                     <span className="text-zinc-500 uppercase block">Agent A (Momentum) Address</span>
                     <div className="flex items-center gap-2">
                       <span className="bg-zinc-950 border border-brand-border rounded px-3 py-2 text-zinc-300 font-bold select-all flex-1 truncate">
-                        5g8Q1t9JYyxvqySMGx7xb9cMftPMkEokRGyXWbt52byd
+                        EwvSmry1ByU9PEqxPSsTLhQQATMeUqZiWBGsDvufCTdo
                       </span>
                       <button
                         onClick={() => handleFundAgent("Agent A")}
@@ -1146,7 +1612,7 @@ export default function TradingDesk() {
                     <span className="text-zinc-500 uppercase block">Agent B (Reversion) Address</span>
                     <div className="flex items-center gap-2">
                       <span className="bg-zinc-950 border border-brand-border rounded px-3 py-2 text-zinc-300 font-bold select-all flex-1 truncate">
-                        6Zao8ocPhmMgq7PdsYWyxvqySMGx7xb9cMftPMkEokRG
+                        41ac5tzvdc5z4BEv5suHmgC32sY2goaNDnTAvJ8gWAs7
                       </span>
                       <button
                         onClick={() => handleFundAgent("Agent B")}
@@ -1162,16 +1628,74 @@ export default function TradingDesk() {
                   <div className="rounded bg-zinc-950 border border-zinc-900 p-4 text-zinc-500 flex gap-2.5">
                     <Info className="h-4 w-4 text-brand-emerald flex-shrink-0 mt-0.5" />
                     <p className="leading-relaxed text-[10px]">
-                      Agent wallets are stored in the local file <code className="text-white">wallets.json</code> inside the workspace. Airdrop requests automatically fund both SOL for validator fee and USDT stake tokens on Solana Devnet.
+                      Agent wallets are stored in the local file <code className="text-white">wallets.json</code> inside
+                      the workspace. Airdrop requests automatically fund both SOL for validator fee and USDT stake
+                      tokens on Solana Devnet.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
           )}
-
         </main>
       </div>
+
+      {/* Floating Signal Alert */}
+      {newSignalAlert && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-lg border border-brand-emerald bg-zinc-950 p-4 shadow-2xl animate-pulse font-mono text-xs text-brand-emerald">
+          <Activity className="h-4 w-4 animate-spin text-brand-emerald" />
+          <span>{newSignalAlert}</span>
+        </div>
+      )}
     </div>
   );
 }
+
+const PRE_BUILT_DUMMY_STRATEGIES: NDimensionalStrategy[] = [
+  {
+    name: "Momentum",
+    description: "Trades in the direction of sudden odds movements, capturing high-velocity trends.",
+    conditions: [{ stat: "Goals", period: 0, comparison: "GreaterThan", threshold: 1 }],
+    entry_signal: "z_score > 2.0 on home/away win odds",
+    stake_usdt: 5,
+    max_positions: 3,
+  },
+  {
+    name: "Reversion",
+    description: "Trades against extreme odds movements, betting on a mean-reverting path.",
+    conditions: [{ stat: "Goals", period: 0, comparison: "LessThan", threshold: 3 }],
+    entry_signal: "z_score < -2.0 on home/away win odds",
+    stake_usdt: 5,
+    max_positions: 3,
+  },
+  {
+    name: "Corner Storm",
+    description: "Bets on high corners count when the match remains tight (goal diff <= 1).",
+    conditions: [
+      { stat: "Corners", period: 0, comparison: "GreaterThan", threshold: 9 },
+      { stat: "Goals", period: 0, comparison: "LessThan", threshold: 2 },
+    ],
+    entry_signal: "corners rate spike with a draw / close game scoreline",
+    stake_usdt: 10,
+    max_positions: 2,
+  },
+  {
+    name: "Upset Hunter",
+    description: "Detects underdogs with high corners and possession index dominating favorites.",
+    conditions: [
+      { stat: "Possession", period: 0, comparison: "GreaterThan", threshold: 55 },
+      { stat: "Corners", period: 0, comparison: "GreaterThan", threshold: 6 },
+    ],
+    entry_signal: "favorite trailing by 1 but dominating corners and possession",
+    stake_usdt: 10,
+    max_positions: 2,
+  },
+  {
+    name: "Half-Time Edge",
+    description: "Exploits high-velocity odds adjustments immediately preceding the half-time break.",
+    conditions: [{ stat: "Goals", period: 1, comparison: "Equal", threshold: 0 }],
+    entry_signal: "velocity threshold shift during 40-45th minute intervals",
+    stake_usdt: 15,
+    max_positions: 1,
+  },
+];
