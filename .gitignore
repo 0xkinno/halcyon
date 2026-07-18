@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local state and wallet keys
+wallets.json
+session.json
+trades.json
+signals.json
+runnerState.json
+get_solver.js
+

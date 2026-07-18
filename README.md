@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HALCYON
 
-## Getting Started
+[![Chain](https://img.shields.io/badge/Solana-Devnet-blue?style=flat-square&logo=solana)](https://explorer.solana.com/)
+[![Program](https://img.shields.io/badge/Program-6pW64gN...P2J-green?style=flat-square)](https://explorer.solana.com/address/6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J?cluster=devnet)
+[![Data](https://img.shields.io/badge/Data%20Feed-TxLINE-emerald?style=flat-square)](https://txline-dev.txodds.com)
+[![Framework](https://img.shields.io/badge/Framework-Next.js%2014-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 
-First, run the development server:
+An autonomous, multi-dimensional sports trading agent desk that detects statistically significant odds movements, executes intents via Solana Devnet, and settles positions trustlessly using cryptographic Merkle proofs.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tagline
+*Deterministic sports betting with zero trust, staying structured and executing trades even while odds whipsaw in live matches.*
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Product Screenshots
 
-## Learn More
+| Overview Desk | Sharp Signals |
+|---|---|
+| ![Overview](public/assets/overview.png) | ![Signals](public/assets/signals.png) |
+| **Arena Duel Performance** | **Merkle Proof Settlements** |
+| ![Arena](public/assets/arena.png) | ![Settlements](public/assets/settlements.png) |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Live Deployment Links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Dashboard Visualizer**: [https://halcyon-sports-desk.vercel.app](https://halcyon-sports-desk.vercel.app)
+- **GitHub Repository**: [https://github.com/0xkinno/halcyon](https://github.com/0xkinno/halcyon)
+- **Solana Program ID (Devnet)**: `6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## The Problem
+Sports trading is plagued by latency arbitrage, exchange insolvencies, and counterparty defaults. While automated trading algorithms exist, trustless settlement remains unsolved because there is no cryptographic guarantee that historical odds and scores have not been tampered with before payouts occur. Existing betting engines rely on centralized oracle feeds that are vulnerable to data manipulation.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
+
+## The Solution
+HALCYON bridges live sports analytics with on-chain accountability. It connects directly to TxLINE's World Cup data stream, calculates statistical anomalies locally, opens matched order intents on-chain, and claims payouts using cryptographic Merkle proofs verified directly inside the Solana SVM validator VM.
+
+![Architecture](https://mermaid.ink/img/Z3JhcGggVEQKICAgIEFbVHhMSU5FIExpdmUgT2RkcyBTdHJlYW1dIC0tPnxTU0UgU3RyZWFtfCBCW1NpZ25hbCBEZXRlY3RvciBMYXllcl0KICAgIEIgLS0+fHotc2NvcmUgLyB2ZWxvY2l0eSBhbm9tYWxpZXN8IENbTkRpbWVuc2lvbmFsU3RyYXRlZ3kgRW5naW5lXQogICAgQyAtLT58VHJpZ2dlciBjb25kaXRpb25zIG1ldHwgRFtTb2xhbmEgRXhlY3V0aW9uIExheWVyXQogICAgRCAtLT58Y3JlYXRlX2ludGVudCAvIGV4ZWN1dGVfbWF0Y2h8IEVbT24tQ2hhaW4gU3RhdGUgU1ZNXQogICAgRltSeExJTkUgUHJvb2YgU2VydmljZV0gLS0+fHZhbGlkYXRlX3N0YXRfdjIgUE9TVHwgR1tBdXRvbWF0ZWQgU2V0dGxlciBEYWVtb25dCiAgICBHIC0tPnxzZXR0bGVfdHJhZGUgd2l0aCBNZXJrbGUgUHJvb2Z8IEU)
+
+---
+
+## Demo Flow
+
+1. **Start System**: Click **START DEPLOYMENT** on the upper right corner of the dashboard to trigger the background agent loop.
+2. **Observe Signals**: Navigate to the **Sharp Signals** tab to see real-time z-score deviations as odds fluctuate.
+3. **Monitor Positions**: Under the **Open Positions** list, watch Agent A (Momentum) and Agent B (Reversion) submit their matching Solana transactions.
+4. **Inspect Settlement**: Once a trade concludes, click the transaction receipt in the **Merkle Settlement** tab to inspect the cryptographic verification proofs.
+
+---
+
+## What's Real vs What's Sample Data
+
+| Module | What is Real | What is Mock / Sample |
+|---|---|---|
+| **Odds / Score Streaming** | Real-time connections to TxLINE SSE streaming servers. | Fallback simulator pushing realistic fluctuations for target demo fixtures if live stream is idle. |
+| **Trade Execution** | Real transaction signatures submitted on Solana Devnet. | None. |
+| **Order Book Solver** | Real maker intents paired with taker intents on-chain. | Match counterparts automatically generated by local solver agent to simulate bookies. |
+| **Settlement** | On-chain settlement via `settleMatchedTrade` using validation proofs. | None. |
+
+---
+
+## Architecture
+
+### NDimensionalStrategy
+Instead of evaluating single stats, HALCYON packages multi-variable conditions (e.g. `Goal Differential <= 1` AND `Corners > 9`) into a single, hashed prediction unit. Payouts are made when the validator executes SVM math validating a Merkle proof of the cumulative scores root.
+
+---
+
+## TxLINE API Endpoints Used
+The agent queries and integrates the following REST and streaming endpoints:
+- `POST /auth/guest/start`: Generates the initial guest session token.
+- `POST /api/token/activate`: Validates and activates the API token using the on-chain signature.
+- `GET /api/odds/stream`: Real-time Server-Sent Events stream for odds updates.
+- `POST /api/scores/stat-validation`: Retreives the Merkle tree verification path and root for sports trade settlement.
+
+---
+
+## Strategy Library
+
+| Strategy Name | Target Market | Conditions | Allocation |
+|---|---|---|---|
+| **Momentum** | Match Odds | Possession >= 50% | 5 USDT |
+| **Reversion** | Match Odds | Shots on Target >= 3 | 5 USDT |
+| **Corner Storm** | Total Corners | Corners > 9 AND Goal Diff within 1 | 10 USDT |
+| **Upset Hunter** | Match Odds | Underdog Corners > 5 AND Possession >= 55% | 10 USDT |
+| **Half-Time Edge** | First Half Goals | First Half Shots >= 5 AND Corners > 4 | 15 USDT |
+
+---
+
+## Arena Mode
+Arena Mode orchestrates two agents running concurrently on the same stream feed:
+- **Agent A (Momentum)**: Evaluates trend-following conditions and trades with the velocity vector.
+- **Agent B (Reversion)**: Bets on mean-reversion, trading against major z-score fluctuations.
+
+---
+
+## Tech Stack
+
+| Component | Technology |
+|---|---|
+| **Runtime / Build** | Next.js 14 App Router + Node.js + TypeScript |
+| **Blockchain** | Solana Devnet (@solana/web3.js + @coral-xyz/anchor) |
+| **Token standard** | SPL Token (USDT) + Token-2022 (TxL) |
+| **Streaming** | Node-compatible HTTP SSE Reader |
+| **Styling** | Space Grotesk + JetBrains Mono + Tailwind CSS |
+
+---
+
+## Running Locally
+
+1. **Clone project & install dependencies**:
+   ```bash
+   git clone https://github.com/0xkinno/halcyon.git
+   cd halcyon
+   npm install
+   ```
+
+2. **Configure environment variables**:
+   Create a `.env.local` file:
+   ```env
+   NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+   SERVICE_WALLET_SECRET_KEY=[...your Solana service keypair secret key byte array...]
+   ```
+
+3. **Start Next.js development server**:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## TxLINE API Feedback
+- **Secure Activation Channels**: The guest-activation endpoint (`/api/token/activate`) is highly reliable but requires Ed25519-detached signing headers that are sensitive to signature replay timing.
+- **SSE Connection Management**: Connecting stream feeds via HTTP GET requires double-headers (JWT Bearer and X-Api-Token) which must be reactively refreshed to avoid 403 blocks during connection dropouts.
+- **On-chain Merkle Verification**: The `stat-validation` endpoint returns clean and structured proofs that deserialize directly into Solana Rust VM representations.
+
+---
+
+## Honest Open Problems
+- **Devnet Congestion**: Airdrop requests occasionally fail due to RPC faucet exhaustion limits, solved via retry loops.
+- **CPU Scaling**: Proof trees for larger multi-variable strategies consume considerable compute units in the SVM resolution phase.
+
+---
+
+## Submission Checklist
+- [x] Complete Next.js 14 pages and API integrations.
+- [x] On-chain Devnet matching and settlement verified.
+- [x] Safe mode circuit breaker risk layers implemented.
+- [x] Comprehensive strategy collection built.
