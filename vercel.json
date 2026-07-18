@@ -1,0 +1,10 @@
+{
+  "services": {
+    "web": {
+      "type": "web",
+      "entrypoint": ".",
+      "routePrefix": "/",
+      "framework": "nextjs"
+    }
+  }
+}
