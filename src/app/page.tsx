@@ -668,14 +668,11 @@ export default function TradingDesk() {
   return (
     <div className="flex h-screen flex-col bg-[#0A0A0A] font-sans selection:bg-[#16A34A]/30 selection:text-white">
       {/* Top Banner for Warnings */}
-      {safeMode.active && (
+      {safeMode.active && runnerState.status !== "simulating" && (
         <div className="flex items-center gap-2 bg-brand-red/10 border-b border-brand-red/30 px-4 py-2 text-xs text-brand-red font-mono">
           <ShieldAlert className="h-4 w-4 animate-pulse flex-shrink-0" />
           <span>
-            <strong>SAFE MODE ACTIVE:</strong> {safeMode.reason}{" "}
-            {runnerState.status === "simulating"
-              ? "(Simulated Trading Active)"
-              : "(New intents blocked, existing trades audited via REST)"}
+            <strong>SAFE MODE ACTIVE:</strong> {safeMode.reason} (New intents blocked, existing trades audited via REST)
           </span>
         </div>
       )}
