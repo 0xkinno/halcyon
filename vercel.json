@@ -2,7 +2,6 @@
   "services": {
     "web": {
       "entrypoint": ".",
-      "routePrefix": "/",
       "framework": "nextjs"
     }
   }
