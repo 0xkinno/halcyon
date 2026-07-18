@@ -1,6 +1,7 @@
 {
   "services": {
     "web": {
+      "root": ".",
       "entrypoint": ".",
       "framework": "nextjs"
     }
