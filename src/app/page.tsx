@@ -1863,7 +1863,7 @@ export default function TradingDesk() {
                       <div className="rounded-xl bg-[#111111]/2 border border-[#111111]/5 p-4 text-[#111111]/50 flex gap-3">
                         <Info className="h-4.5 w-4.5 text-[#111111]/60 flex-shrink-0 mt-0.5" strokeWidth={1} />
                         <p className="leading-relaxed text-[10px] font-light">
-                          Keypair storage linkage matches configuration file <code className="text-[#111111] font-bold">wallets.json</code>. Airdrop calls direct devnet SOL faucet injection and simulated USDT balance allocation.
+                          Keypair storage linkage matches configuration file <code className="text-[#111111] font-bold">wallets.json</code>. Airdrop calls direct devnet SOL faucet injection and real on-chain USDT devnet faucet instruction execution.
                         </p>
                       </div>
                     </div>
