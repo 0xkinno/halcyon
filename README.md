@@ -16,11 +16,11 @@ An autonomous, multi-dimensional sports trading agent desk that detects statisti
 
 ## Product Screenshots
 
-| Overview Desk | Sharp Signals |
+| Platform Hero | Telemetry Pipeline |
 |---|---|
+| ![Home](public/assets/home.png) | ![Telemetry](public/assets/telemetry.png) |
+| **System Overview Desk** | **Sharp Signals Registry** |
 | ![Overview](public/assets/overview.png) | ![Signals](public/assets/signals.png) |
-| **Arena Duel Performance** | **Merkle Proof Settlements** |
-| ![Arena](public/assets/arena.png) | ![Settlements](public/assets/settlements.png) |
 
 ---
 
