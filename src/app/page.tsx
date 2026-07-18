@@ -108,7 +108,7 @@ interface AgentState {
 }
 
 export default function TradingDesk() {
-  // Navigation & Page State
+  // Navigation & Page State (Preserved)
   const [viewMode, setViewMode] = useState<"landing" | "dashboard">("landing");
   const [activeTab, setActiveTab] = useState<
     "overview" | "signals" | "strategies" | "arena" | "positions" | "settlement" | "settings"
@@ -151,7 +151,7 @@ export default function TradingDesk() {
   const [fundingAgent, setFundingAgent] = useState<string | null>(null);
   const [newSignalAlert, setNewSignalAlert] = useState<string | null>(null);
 
-  // Scroll position tracker for landing page styling
+  // Scroll tracker (Preserved)
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -668,454 +668,281 @@ export default function TradingDesk() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EDF6FD] text-[#0F172A] antialiased selection:bg-[#3B82F6]/20 font-sans">
-      {/* Custom Styles for Animations, Shimmers, and Smooth Easing */}
+    <div className="min-h-screen bg-[#F5F2EB] text-[#121212] antialiased selection:bg-[#235BFF]/10 font-sans">
+      
+      {/* V2 DESIGN SYSTEM - ELEGANT TYPOGRAPHY & SOLEMN ANIMATIONS */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         
         body {
           font-family: 'Plus Jakarta Sans', sans-serif;
+          background-color: #F5F2EB;
         }
 
-        /* 3D and floating animations */
-        @keyframes float {
-          0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-8px) rotate(0.5deg); }
-          100% { transform: translateY(0px) rotate(0deg); }
+        .font-serif-editorial {
+          font-family: 'Cormorant Garamond', serif;
         }
 
-        @keyframes dataFlow {
-          0% { stroke-dashoffset: 100; }
-          100% { stroke-dashoffset: 0; }
+        .font-mono-tech {
+          font-family: 'IBM Plex Mono', monospace;
         }
 
-        @keyframes pulseGlow {
-          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-          70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        /* Very slow, high-end transitions */
+        .transition-editorial {
+          transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .data-flow-line {
-          stroke-dasharray: 8 4;
-          animation: dataFlow 4s linear infinite;
-        }
-
-        .pulse-glow {
-          animation: pulseGlow 2s infinite;
-        }
-
-        /* Smooth page switch transition */
         .page-fade-in {
-          animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: fadeInEditorial 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.98); }
-          to { opacity: 1; transform: scale(1); }
+        @keyframes fadeInEditorial {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Hide Scrollbar for pure layouts */
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
+        /* Clean outlines and subtle elevation */
+        .border-editorial {
+          border: 1px solid rgba(18, 18, 18, 0.08);
         }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+        
+        .divider-editorial {
+          background-color: rgba(18, 18, 18, 0.08);
+        }
+
+        .hover-lift:hover {
+          transform: translateY(-2px);
+          border-color: rgba(18, 18, 18, 0.18);
         }
       `}</style>
 
-      {/* VIEW 1: LANDING PAGE */}
+      {/* VIEW 1: LANDING PAGE (PREMIUM EDITORIAL) */}
       {viewMode === "landing" && (
-        <div className="page-fade-in flex flex-col min-h-screen bg-[#F4F8FC]">
+        <div className="page-fade-in flex flex-col min-h-screen">
           
-          {/* Navigation Bar */}
-          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled ? "bg-white/80 backdrop-blur-md border-b border-[#EAF2FB] py-4 shadow-sm" : "bg-transparent py-6"
+          {/* Sticky transparent header with blur */}
+          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            isScrolled ? "bg-[#F5F2EB]/80 backdrop-blur-md border-b border-[#121212]/5 py-4" : "bg-transparent py-7"
           }`}>
-            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="bg-[#3B82F6] text-white p-2 rounded-xl shadow-md shadow-blue-500/20">
-                  <Zap className="h-5 w-5 fill-current" />
-                </div>
-                <div>
-                  <span className="font-extrabold text-xl tracking-tight text-[#0F172A]">HALCYON</span>
-                  <span className="text-[9px] block text-[#64748B] font-mono tracking-widest uppercase">SPORTS OS</span>
-                </div>
+            <div className="max-w-7xl mx-auto px-10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-2 w-2 rounded-full bg-[#235BFF]" />
+                <span className="font-bold text-base tracking-[0.1em] text-[#121212] uppercase font-mono-tech">HALCYON</span>
               </div>
 
-              {/* Navigation Menu */}
-              <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#475569]">
-                <a href="#hero" className="hover:text-[#3B82F6] transition-colors">Home</a>
-                <a href="#pipeline" className="hover:text-[#3B82F6] transition-colors">Technology</a>
-                <a href="#strategies" className="hover:text-[#3B82F6] transition-colors">Strategies</a>
-                <a href="#architecture" className="hover:text-[#3B82F6] transition-colors">Architecture</a>
-                <a href="#preview" className="hover:text-[#3B82F6] transition-colors">Live Preview</a>
+              {/* Minimal links */}
+              <div className="hidden md:flex items-center gap-10 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#121212]/60">
+                <a href="#hero" className="hover:text-[#121212] transition-colors">Philosophy</a>
+                <a href="#telemetry" className="hover:text-[#121212] transition-colors">Telemetry</a>
+                <a href="#tactics" className="hover:text-[#121212] transition-colors">Tactics</a>
+                <a href="#vault" className="hover:text-[#121212] transition-colors">Vaults</a>
+                <a href="#sandbox" className="hover:text-[#121212] transition-colors">Sandbox</a>
               </div>
 
-              <div className="flex items-center gap-4">
-                <a 
-                  href="https://github.com/0xkinno/halcyon" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="hidden sm:flex items-center gap-1.5 text-xs font-mono font-bold text-[#475569] hover:text-[#0F172A] transition-colors border border-[#E2E8F0] px-3.5 py-2 rounded-full bg-white shadow-sm"
-                >
-                  <Terminal className="h-3.5 w-3.5" />
-                  GitHub
-                </a>
+              <div className="flex items-center gap-6">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="flex items-center gap-1.5 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transition-all hover:scale-[1.02]"
+                  className="rounded-full bg-[#121212] hover:bg-black px-6 py-3 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial shadow-sm hover:scale-[1.01]"
                 >
-                  <span>Launch System</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  Launch OS
                 </button>
               </div>
             </div>
           </nav>
 
-          {/* Hero Section */}
-          <section id="hero" className="pt-32 pb-24 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center flex-1">
-            <div className="lg:col-span-6 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3B82F6]/10 text-[#3B82F6] text-xs font-bold border border-[#3B82F6]/10">
-                <Cpu className="h-3.5 w-3.5 animate-pulse" />
-                <span>Next-Generation Algorithmic Execution</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0F172A] tracking-tight leading-[1.1]">
-                Autonomous <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#6366F1]">Multi-Dimensional</span> Sports Trading.
+          {/* Hero Section - Magazine Layout */}
+          <section id="hero" className="pt-40 pb-28 px-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start flex-1">
+            <div className="lg:col-span-7 space-y-8 text-left">
+              <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#235BFF] uppercase block">
+                SYSTEM DEPLOYMENT: SOLANA DEVNET
+              </span>
+              
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-light font-serif-editorial text-[#121212] leading-[0.9] tracking-tight">
+                Autonomous<br />
+                Sports<br />
+                Intelligence.
               </h1>
-              <p className="text-base sm:text-lg text-[#475569] leading-relaxed max-w-xl">
-                AI agents monitor live odds feeds, analyze real-time match events, execute deterministic tournament strategies, and settle every intent trustlessly on Solana Devnet.
+              
+              <p className="text-base text-[#121212]/70 font-light leading-relaxed max-w-lg">
+                An institutional operating system executing multi-agent sports anomaly strategies. Trades are committed programmatically to locked escrow positions and settled verification-only.
               </p>
-              <div className="flex flex-wrap gap-4 pt-2">
+
+              <div className="flex flex-wrap gap-5 pt-4">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="px-7 py-3.5 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] text-sm font-bold text-white shadow-xl shadow-blue-500/20 hover:scale-105 transition-transform"
+                  className="px-8 py-4 rounded-full bg-[#235BFF] hover:bg-blue-700 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial"
                 >
-                  Launch HALCYON Platform
+                  Initialize Platform
                 </button>
                 <a
-                  href="#pipeline"
-                  className="px-7 py-3.5 rounded-full border border-[#E2E8F0] hover:border-[#CBD5E1] bg-white text-sm font-bold text-[#475569] shadow-sm transition-all"
+                  href="#telemetry"
+                  className="px-8 py-4 rounded-full border border-[#121212]/15 bg-transparent text-xs font-mono-tech uppercase tracking-[0.15em] text-[#121212] hover:bg-[#121212]/5 transition-editorial"
                 >
-                  Explore Stacking
+                  System Manual
                 </a>
               </div>
-
-              {/* Live Metric Badges */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-[#EAF2FB] max-w-lg">
-                <div>
-                  <span className="block text-2xl font-bold text-[#0F172A] font-mono">100+</span>
-                  <span className="text-xs text-[#64748B]">Signals Tracked</span>
-                </div>
-                <div>
-                  <span className="block text-2xl font-bold text-[#0F172A] font-mono">2.4ms</span>
-                  <span className="text-xs text-[#64748B]">Execution Speed</span>
-                </div>
-                <div>
-                  <span className="block text-2xl font-bold text-[#0F172A] font-mono">100%</span>
-                  <span className="text-xs text-[#64748B]">Merkle Settled</span>
-                </div>
-              </div>
             </div>
 
-            {/* Architecture SVG Illustration */}
-            <div className="lg:col-span-6 flex justify-center relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-100 to-indigo-100 blur-3xl opacity-40 -z-10 rounded-full scale-75" />
-              
-              <div className="w-full max-w-[500px] bg-white rounded-3xl p-6 border border-[#EAF2FB] shadow-2xl shadow-blue-900/5 animate-float">
-                <div className="flex justify-between items-center pb-4 mb-4 border-b border-[#EAF2FB] text-xs font-mono text-[#64748B]">
-                  <span>SYSTEM PIPELINE MONITOR</span>
-                  <span className="text-[#3B82F6] flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    LIVE OK
-                  </span>
-                </div>
-
-                {/* SVG Graph Pipeline */}
-                <svg viewBox="0 0 400 300" className="w-full h-auto overflow-visible">
-                  {/* Pipeline dashed connections */}
-                  <path d="M 60 70 L 150 150 M 60 230 L 150 150 M 150 150 L 250 150 M 250 150 L 340 70 M 250 150 L 340 230" fill="none" stroke="#E2E8F0" strokeWidth="2" />
-                  <path d="M 60 70 L 150 150 M 60 230 L 150 150 M 150 150 L 250 150 M 250 150 L 340 70 M 250 150 L 340 230" fill="none" stroke="#3B82F6" strokeWidth="2.5" className="data-flow-line" />
-
-                  {/* Node 1: TxLINE Live Feed */}
-                  <g transform="translate(60, 70)">
-                    <circle r="22" fill="#EBF3FF" stroke="#3B82F6" strokeWidth="2" />
-                    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#3B82F6" />
-                    <path d="M-6 -2 L6 -2 M-6 2 L4 2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                    <text y="38" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0F172A">TxLINE Odds</text>
-                  </g>
-
-                  {/* Node 2: Live In-Play Stats */}
-                  <g transform="translate(60, 230)">
-                    <circle r="22" fill="#EEF2F6" stroke="#94A3B8" strokeWidth="2" />
-                    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#94A3B8" />
-                    <path d="M-6 -4 L2 4 M-2 -4 L6 4" stroke="white" strokeWidth="2" />
-                    <text y="38" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0F172A">Telemetry</text>
-                  </g>
-
-                  {/* Center Node: Multi-Agent Arena */}
-                  <g transform="translate(150, 150)">
-                    <circle r="28" fill="#EEF2FF" stroke="#6366F1" strokeWidth="2" className="pulse-glow" />
-                    <circle r="20" fill="#6366F1" />
-                    <path d="M-6 0 L6 0 M0 -6 L0 6" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
-                    <text y="44" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#6366F1">AI Engine</text>
-                  </g>
-
-                  {/* Node 3: Solana Escrow Contract */}
-                  <g transform="translate(250, 150)">
-                    <circle r="28" fill="#ECFDF5" stroke="#10B981" strokeWidth="2" />
-                    <circle r="20" fill="#10B981" />
-                    <text y="5" textAnchor="middle" fontSize="11" fontWeight="bold" fill="white">SOL</text>
-                    <text y="44" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#10B981">Escrow</text>
-                  </g>
-
-                  {/* Node 4: Agent A Wallet */}
-                  <g transform="translate(340, 70)">
-                    <circle r="22" fill="#EBF3FF" stroke="#3B82F6" strokeWidth="2" />
-                    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#3B82F6" />
-                    <text y="4" textAnchor="middle" fontSize="12" fontWeight="extrabold" fill="white">A</text>
-                    <text y="38" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0F172A">Momentum</text>
-                  </g>
-
-                  {/* Node 5: Agent B Wallet */}
-                  <g transform="translate(340, 230)">
-                    <circle r="22" fill="#FAF5FF" stroke="#A855F7" strokeWidth="2" />
-                    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="#A855F7" />
-                    <text y="4" textAnchor="middle" fontSize="12" fontWeight="extrabold" fill="white">B</text>
-                    <text y="38" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0F172A">Reversion</text>
-                  </g>
-                </svg>
-
-                {/* Floating Analytics Card mock */}
-                <div className="mt-4 bg-[#EDF6FD] border border-[#3B82F6]/10 rounded-xl p-3 flex items-center justify-between text-[11px] font-mono">
-                  <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-[#3B82F6] animate-pulse" />
-                    <span className="text-[#475569]">Z-SCORE EXCEEDED:</span>
-                    <span className="text-blue-700 font-bold font-mono">+3.84 (Spain)</span>
-                  </div>
-                  <span className="text-emerald-600 font-bold">MATCHED</span>
-                </div>
+            {/* Generated Hero Image - Floating Stadium */}
+            <div className="lg:col-span-5 w-full">
+              <div className="rounded-[24px] border-editorial overflow-hidden bg-[#EFE9DE] p-2 shadow-sm animate-float">
+                <img 
+                  src="/hero_stadium.png" 
+                  alt="Institutional Sports Intelligence" 
+                  className="w-full h-auto rounded-[20px] grayscale brightness-95 contrast-105"
+                />
+              </div>
+              <div className="mt-4 text-left font-mono-tech text-[9px] text-[#121212]/50 tracking-[0.15em] uppercase flex justify-between px-2">
+                <span>PLATE #01 — TACTICAL FORECAST</span>
+                <span>SYSTEM ACTIVE</span>
               </div>
             </div>
           </section>
 
-          {/* Section: The Problem & Solution */}
-          <section id="pipeline" className="py-20 border-t border-[#EAF2FB] bg-white">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <span className="text-xs font-bold tracking-widest text-[#3B82F6] uppercase">The Platform Philosophy</span>
-                <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight sm:text-4xl">
-                  Bringing Algorithmic Rigor to In-Play Markets
+          {/* Philosophy Section */}
+          <section className="py-32 border-t border-[#121212]/5 bg-[#F6F3EC]">
+            <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              <div className="lg:col-span-5 text-left space-y-6">
+                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #02 — PHILOSOPHY</span>
+                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                  Bringing algorithmic rigor to sports events.
                 </h2>
-                <p className="text-base text-[#475569] leading-relaxed">
-                  Traditional sports speculation is plagued by centralization, counterparty risk, and opaque margin models. HALCYON introduces a deterministic, program-based trading system.
+                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                  Classical sports trading models fail due to human bias, central execution control, and counterparty delays. HALCYON removes intermediation by handling capital inside non-custodial smart contracts, triggered by real-time streams.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="p-8 rounded-2xl bg-[#F4F8FC] border border-[#EAF2FB] space-y-4">
-                  <div className="h-10 w-10 rounded-lg bg-[#3B82F6]/10 flex items-center justify-center text-[#3B82F6]">
-                    <Sliders className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#0F172A]">N-Dimensional Logic</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
-                    Strategies are evaluated against multiple real-time indicators—goals, corners, possession, cards, and temporal intervals—not just static baseline odds.
-                  </p>
-                </div>
-
-                <div className="p-8 rounded-2xl bg-[#F4F8FC] border border-[#EAF2FB] space-y-4">
-                  <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#0F172A]">Non-Custodial Escrow</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
-                    Trades are locked trustlessly in a Solana smart contract program. Funds cannot be seized, withheld, or manipulated by any centralized broker.
-                  </p>
-                </div>
-
-                <div className="p-8 rounded-2xl bg-[#F4F8FC] border border-[#EAF2FB] space-y-4">
-                  <div className="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600">
-                    <FileCheck className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#0F172A]">Merkle Verification</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
-                    Settle outcomes with verifiable Merkle proofs linked to oracle state roots. Payouts are executed automatically without human intervention.
-                  </p>
+              <div className="lg:col-span-7">
+                <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EEE8DD]">
+                  <img 
+                    src="/ai_engine.png" 
+                    alt="Autonomous Architecture sculpture" 
+                    className="w-full h-auto rounded-[20px] grayscale"
+                  />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Section: Strategies Overview */}
-          <section id="strategies" className="py-20 bg-[#F4F8FC] border-t border-[#EAF2FB]">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-                <div className="max-w-xl space-y-4">
-                  <span className="text-xs font-bold tracking-widest text-[#3B82F6] uppercase">Active Engine Algorithms</span>
-                  <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
-                    Dual-Agent Strategic Consensus
-                  </h2>
-                  <p className="text-sm text-[#475569]">
-                    HALCYON splits capital across opposing agents executing Momentum and Reversion models, matching them in direct peer-to-peer arena duels.
-                  </p>
+          {/* Section: Telemetry / Live Match */}
+          <section id="telemetry" className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5">
+            <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              <div className="lg:col-span-7">
+                <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EFE9DE]">
+                  <img 
+                    src="/live_match.png" 
+                    alt="Live match athlete sprinting" 
+                    className="w-full h-auto rounded-[20px] grayscale brightness-90 contrast-105"
+                  />
                 </div>
-                <button
-                  onClick={() => setViewMode("dashboard")}
-                  className="mt-6 md:mt-0 flex items-center gap-1.5 text-xs font-extrabold text-[#3B82F6] hover:text-blue-700 transition-colors"
-                >
-                  Configure active strategies
-                  <ChevronRight className="h-4 w-4" />
-                </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {PRE_BUILT_DUMMY_STRATEGIES.slice(0, 3).map((strat) => (
-                  <div key={strat.name} className="bg-white rounded-2xl border border-[#EAF2FB] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center border-b border-[#EAF2FB] pb-3">
-                        <span className="font-extrabold text-[#0F172A]">{strat.name}</span>
-                        <span className="rounded-full bg-blue-50 text-blue-600 border border-blue-100 px-2 py-0.5 text-[9px] font-bold font-mono">ACTIVE</span>
-                      </div>
-                      <p className="text-xs text-[#475569] leading-relaxed">{strat.description}</p>
-                      
-                      <div className="space-y-1.5 pt-2">
-                        <span className="text-[9px] font-bold text-[#94A3B8] font-mono tracking-widest uppercase block">Conditions</span>
-                        {strat.conditions.map((cond, idx) => (
-                          <div key={idx} className="flex justify-between text-[11px] font-mono bg-[#F8FAFC] border border-[#EAF2FB] px-2.5 py-1.5 rounded-lg">
-                            <span className="text-blue-600">{cond.stat}</span>
-                            <span className="font-bold text-[#0F172A]">{cond.comparison} {cond.threshold}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="border-t border-[#EAF2FB] pt-4 mt-6 text-[10px] font-mono text-[#64748B] flex justify-between">
-                      <span>Stake: <strong>{strat.stake_usdt} USDT</strong></span>
-                      <span>Max concurrent: <strong>{strat.max_positions}</strong></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Section: Architecture / Tech Stack */}
-          <section id="architecture" className="py-20 bg-white border-t border-[#EAF2FB]">
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-5 space-y-6 text-left">
-                <span className="text-xs font-bold tracking-widest text-[#3B82F6] uppercase">Cryptographic Integrity</span>
-                <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
-                  The Trustless Execution Loop
+              <div className="lg:col-span-5 text-left space-y-6">
+                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #03 — TELEMETRY</span>
+                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                  Deterministic streaming parameters.
                 </h2>
-                <p className="text-xs text-[#475569] leading-relaxed">
-                  Every trade represents a cryptographic agreement. Halcyon writes both maker and taker intents into a program escrow account, matching them when the TxLINE stream triggers an event anomaly.
+                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                  Continuous feed telemetry reads events directly from the database, feeding raw variables (goals, corners, possession, time index) into our mathematical z-score evaluation layers.
                 </p>
-
-                <div className="space-y-4 pt-2">
-                  <div className="flex gap-3">
-                    <div className="h-6 w-6 rounded-full bg-blue-50 text-[#3B82F6] flex items-center justify-center text-xs font-bold">1</div>
-                    <p className="text-xs text-[#475569]"><strong className="text-[#0F172A]">SSE Signal Injection:</strong> Event stream telemetry triggers z-score violations.</p>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="h-6 w-6 rounded-full bg-blue-50 text-[#3B82F6] flex items-center justify-center text-xs font-bold">2</div>
-                    <p className="text-xs text-[#475569]"><strong className="text-[#0F172A]">Program Matching:</strong> Accounts lock collateral (USDT) on Solana Devnet.</p>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="h-6 w-6 rounded-full bg-blue-50 text-[#3B82F6] flex items-center justify-center text-xs font-bold">3</div>
-                    <p className="text-xs text-[#475569]"><strong className="text-[#0F172A]">Merkle Proof Payouts:</strong> Validator roots verify final scores and unlock funds.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Technical Code Block Preview */}
-              <div className="lg:col-span-7 bg-[#0F172A] rounded-3xl p-6 shadow-2xl text-left border border-slate-800 text-[#CBD5E1] font-mono text-[11px] overflow-x-auto no-scrollbar">
-                <div className="flex gap-2 pb-4 mb-4 border-b border-slate-800">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-[10px] text-slate-500 ml-2">halcyon_escrow.rs</span>
-                </div>
-                <pre>{`pub fn create_trade(
-    ctx: Context<CreateTrade>,
-    fixture_id: u64,
-    market_type: u8,
-    outcome: u8,
-    stake_amount: u64,
-    target_odds: u32,
-) -> Result<()> {
-    let trade = &mut ctx.accounts.trade;
-    trade.maker = ctx.accounts.maker.key();
-    trade.taker = ctx.accounts.taker.key();
-    trade.fixture_id = fixture_id;
-    trade.market_type = market_type;
-    trade.outcome = outcome;
-    trade.stake = stake_amount;
-    trade.odds = target_odds;
-    trade.status = TradeStatus::Matched;
-
-    // Escrow transfer instructions to vault account
-    token::transfer(
-        ctx.accounts.transfer_to_vault_context(),
-        stake_amount
-    )?;
-    Ok(())
-}`}</pre>
               </div>
             </div>
           </section>
 
-          {/* Section: Live Preview Widget */}
-          <section id="preview" className="py-20 bg-[#F4F8FC] border-t border-[#EAF2FB]">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="max-w-3xl mx-auto text-center space-y-4 mb-12">
-                <span className="text-xs font-bold tracking-widest text-[#3B82F6] uppercase">Interactive Sandbox Preview</span>
-                <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
-                  Real-time Operational Stream
+          {/* Section: Tactics Board */}
+          <section id="tactics" className="py-32 bg-[#F6F3EC] border-t border-[#121212]/5">
+            <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              <div className="lg:col-span-5 text-left space-y-6">
+                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #04 — STRATEGY</span>
+                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                  Dual-Agent arena consensus.
                 </h2>
-                <p className="text-sm text-[#475569]">
-                  See live telemetry feeding directly from the simulated oracle stream into the dashboard database.
+                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                  Two isolated, opposing agents monitor the same telemetry block simultaneously. When a sharp pricing deviation occurs, Agent A matches Agent B in a balanced escrow vault trade.
                 </p>
               </div>
 
-              {/* Dynamic Signals Table on Landing */}
-              <div className="max-w-4xl mx-auto bg-white border border-[#EAF2FB] rounded-2xl shadow-xl overflow-hidden p-6">
-                <div className="flex justify-between items-center pb-4 mb-4 border-b border-[#EAF2FB]">
-                  <span className="text-xs font-mono font-bold text-[#64748B] flex items-center gap-1.5">
-                    <Activity className="h-4 w-4 text-[#3B82F6] animate-pulse" />
-                    LIVE SIGNALS STREAM (LAST 5 ITEMS)
-                  </span>
-                  <span className="text-[10px] font-mono bg-blue-50 text-blue-600 border border-blue-100 rounded-full px-2 py-0.5">AUTO REFRESHING</span>
+              <div className="lg:col-span-7">
+                <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EFE9DE]">
+                  <img 
+                    src="/strategy_tactics.png" 
+                    alt="Tactics board workspace" 
+                    className="w-full h-auto rounded-[20px] grayscale"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section: Escrow Vault */}
+          <section id="vault" className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5">
+            <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+              <div className="lg:col-span-7">
+                <div className="rounded-[24px] border-editorial overflow-hidden p-2 bg-[#EFE9DE]">
+                  <img 
+                    src="/escrow_vault.png" 
+                    alt="Architectural vault door" 
+                    className="w-full h-auto rounded-[20px] grayscale brightness-95"
+                  />
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 text-left space-y-6">
+                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #05 — SECURITY</span>
+                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                  On-chain Merkle execution.
+                </h2>
+                <p className="text-xs text-[#121212]/60 leading-relaxed font-light">
+                  Positions remain locked securely in a non-custodial program account on Solana. Payout validation is resolved by proving outcomes against oracle-generated Merkle root signatures.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Live Preview Sandbox */}
+          <section id="sandbox" className="py-32 bg-[#F6F3EC] border-t border-[#121212]/5">
+            <div className="max-w-7xl mx-auto px-10">
+              <div className="max-w-2xl text-left space-y-4 mb-16">
+                <span className="text-[10px] font-mono-tech tracking-[0.2em] text-[#121212]/50 uppercase block">PLATE #06 — DATA STREAM</span>
+                <h2 className="text-4xl font-serif-editorial font-light text-[#121212] leading-tight">
+                  Active Sandbox Telemetry
+                </h2>
+                <p className="text-xs text-[#121212]/60 font-light">
+                  Audit the real-time incoming mock stream signals flowing directly through our server processing layers.
+                </p>
+              </div>
+
+              <div className="bg-[#F5F2EB] border-editorial rounded-[24px] p-8 shadow-sm max-w-4xl">
+                <div className="flex justify-between items-center pb-4 mb-4 border-b border-[#121212]/5">
+                  <span className="text-[10px] font-mono-tech font-bold text-[#121212]/50 tracking-[0.15em] uppercase">EVENT BROADCAST CHANNEL</span>
+                  <span className="text-[9px] font-mono-tech bg-[#235BFF]/10 text-[#235BFF] px-3 py-1 rounded-full font-bold uppercase tracking-wider">SECURE SSE LINK</span>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs font-mono">
+                  <table className="w-full text-left text-xs font-mono-tech">
                     <thead>
-                      <tr className="border-b border-[#EAF2FB] text-[#64748B]">
-                        <th className="pb-3">FIXTURE</th>
-                        <th className="pb-3">MARKET</th>
-                        <th className="pb-3">PRICE DEVIATION</th>
-                        <th className="pb-3">Z-SCORE</th>
-                        <th className="pb-3">TIME</th>
+                      <tr className="border-b border-[#121212]/5 text-[#121212]/50">
+                        <th className="pb-3 uppercase tracking-wider">Fixture</th>
+                        <th className="pb-3 uppercase tracking-wider">Type</th>
+                        <th className="pb-3 uppercase tracking-wider">Old → New Odds</th>
+                        <th className="pb-3 uppercase tracking-wider">Z-Score</th>
+                        <th className="pb-3 uppercase tracking-wider">Timestamp</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#EAF2FB]">
+                    <tbody className="divide-y divide-[#121212]/5">
                       {(signals.length ? signals.slice(0, 5) : DUMMY_SIGNALS).map((sig) => (
-                        <tr key={sig.id} className="text-[#334155] hover:bg-slate-50/50">
-                          <td className="py-3.5 font-bold text-[#0F172A]">{sig.fixtureName}</td>
-                          <td className="py-3.5 text-xs text-[#64748B]">{sig.marketType} ({sig.outcome})</td>
-                          <td className="py-3.5 font-bold">
-                            {sig.oldOdds.toFixed(2)} → <span className="text-blue-600 font-extrabold">{sig.newOdds.toFixed(2)}</span>
+                        <tr key={sig.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                          <td className="py-4 font-bold text-[#121212]">{sig.fixtureName}</td>
+                          <td className="py-4 text-[#121212]/60">{sig.marketType} ({sig.outcome})</td>
+                          <td className="py-4 font-bold">
+                            {sig.oldOdds.toFixed(2)} → <span className="text-[#235BFF] font-extrabold">{sig.newOdds.toFixed(2)}</span>
                           </td>
-                          <td className="py-3.5">
+                          <td className="py-4">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${sig.zScore >= 0 ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
                               {sig.zScore >= 0 ? "+" : ""}{sig.zScore.toFixed(2)}
                             </span>
                           </td>
-                          <td className="py-3.5 text-[10px] text-[#94A3B8]">{new Date(sig.timestamp).toLocaleTimeString()}</td>
+                          <td className="py-4 text-[#121212]/40 text-[10px]">{new Date(sig.timestamp).toLocaleTimeString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1125,21 +952,21 @@ export default function TradingDesk() {
             </div>
           </section>
 
-          {/* Final Call to Action Footer */}
-          <section className="py-20 bg-white border-t border-[#EAF2FB] flex-shrink-0">
-            <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-              <h2 className="text-3xl font-extrabold text-[#0F172A] tracking-tight sm:text-4xl">
-                Ready to Deploy AI Strategies?
+          {/* Footer Call to Action */}
+          <section className="py-32 bg-[#F5F2EB] border-t border-[#121212]/5 flex-shrink-0">
+            <div className="max-w-4xl mx-auto px-10 text-left space-y-8">
+              <h2 className="text-5xl font-serif-editorial font-light text-[#121212] leading-tight">
+                Audit system transactions and telemetry outcomes.
               </h2>
-              <p className="text-sm text-[#475569] max-w-xl mx-auto">
-                Step into the high-frequency trading arena. Monitor agent vs agent performance, query cryptographic proof paths, and withdraw profits non-custodially.
+              <p className="text-xs text-[#121212]/60 leading-relaxed font-light max-w-xl">
+                Open the system dashboard to trace running tournament logs, deploy local faucet testing, and inspect Merkle proof audit chains.
               </p>
-              <div className="pt-2">
+              <div className="pt-4">
                 <button
                   onClick={() => setViewMode("dashboard")}
-                  className="px-8 py-4 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] text-sm font-bold text-white shadow-xl shadow-blue-500/20 hover:scale-105 transition-transform"
+                  className="px-10 py-5 rounded-full bg-[#121212] hover:bg-black text-xs font-mono-tech uppercase tracking-[0.2em] text-[#F5F2EB] transition-editorial"
                 >
-                  🚀 Launch System Dashboard
+                  🚀 Mount OS Terminal
                 </button>
               </div>
             </div>
@@ -1147,63 +974,61 @@ export default function TradingDesk() {
         </div>
       )}
 
-      {/* VIEW 2: FULL SYSTEM DASHBOARD (LIGHT-NAVY ENTERPRISE EDITION) */}
+      {/* VIEW 2: FULL SYSTEM DASHBOARD (MONOCHROME EDITORIAL EDITION) */}
       {viewMode === "dashboard" && (
-        <div className="page-fade-in flex h-screen overflow-hidden bg-[#F4F8FC]">
+        <div className="page-fade-in flex h-screen overflow-hidden bg-[#F5F2EB]">
           
-          {/* Dashboard Left Sidebar - Clean & Pro (Reference 1 Styled) */}
-          <aside className="w-72 border-r border-[#E2E8F0] bg-white flex flex-col justify-between flex-shrink-0">
-            <div className="p-6 flex-1 flex flex-col">
+          {/* Dashboard Left Sidebar - Clean & Minimalist (Reference 1 Styled) */}
+          <aside className="w-72 border-r border-[#121212]/10 bg-[#F5F2EB] flex flex-col justify-between flex-shrink-0">
+            <div className="p-8 flex-1 flex flex-col">
               
               {/* Product Branding Header */}
-              <div className="flex items-center gap-3 pb-6 border-b border-[#EAF2FB] mb-6">
-                <div className="bg-[#3B82F6] text-white p-2 rounded-xl shadow-md shadow-blue-500/10">
-                  <Zap className="h-5 w-5 fill-current" />
-                </div>
+              <div className="flex items-center gap-3 pb-8 border-b border-[#121212]/10 mb-8">
+                <div className="h-2 w-2 rounded-full bg-[#235BFF]" />
                 <div>
-                  <h1 className="font-extrabold text-lg tracking-tight text-[#0F172A]">HALCYON</h1>
-                  <span className="text-[9px] block text-[#64748B] font-mono tracking-widest uppercase">SPORTS OS</span>
+                  <h1 className="font-bold text-sm tracking-[0.1em] text-[#121212] uppercase font-mono-tech">HALCYON</h1>
+                  <span className="text-[8px] block text-[#121212]/40 font-mono-tech tracking-[0.15em] uppercase">SPORTS INTEL OS</span>
                 </div>
               </div>
 
               {/* Sidebar Navigation */}
-              <nav className="flex-1 space-y-6">
+              <nav className="flex-1 space-y-8">
                 
                 {/* Category 1 */}
-                <div className="space-y-1">
-                  <p className="px-3 pb-2 text-[9px] font-mono font-bold tracking-widest text-[#94A3B8] uppercase">TRADING DESK</p>
+                <div className="space-y-1.5">
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">TELEMETRY DESK</p>
                   
                   <button
                     onClick={() => setActiveTab("overview")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "overview"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Activity className="h-4.5 w-4.5" />
-                      <span>Overview Desk</span>
+                      <Activity className="h-4 w-4" strokeWidth={1} />
+                      <span>Overview</span>
                     </div>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-mono text-[#64748B]">
+                    <span className="text-[10px] font-bold text-[#121212]/60">
                       {openPositions.length}
                     </span>
                   </button>
 
                   <button
                     onClick={() => setActiveTab("signals")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "signals"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <TrendingUp className="h-4.5 w-4.5" />
+                      <TrendingUp className="h-4 w-4" strokeWidth={1} />
                       <span>Sharp Signals</span>
                     </div>
                     {signals.length > 0 && (
-                      <span className="rounded-full bg-blue-50 border border-blue-100 px-2 py-0.5 text-[10px] font-mono text-[#3B82F6] font-bold">
+                      <span className="text-[10px] font-bold text-[#235BFF]">
                         {signals.length}
                       </span>
                     )}
@@ -1211,308 +1036,303 @@ export default function TradingDesk() {
 
                   <button
                     onClick={() => setActiveTab("strategies")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "strategies"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Layers className="h-4.5 w-4.5" />
-                      <span>ND-Strategies</span>
+                      <Layers className="h-4 w-4" strokeWidth={1} />
+                      <span>Strategies</span>
                     </div>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-mono text-[#64748B]">
+                    <span className="text-[10px] text-[#121212]/40">
                       {strategies.length || 5}
                     </span>
                   </button>
 
                   <button
                     onClick={() => setActiveTab("arena")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "arena"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Award className="h-4.5 w-4.5" />
+                      <Award className="h-4 w-4" strokeWidth={1} />
                       <span>Arena Duel</span>
                     </div>
-                    <span className="rounded-full bg-emerald-50 border border-emerald-100 px-2 py-0.5 text-[9px] font-mono text-emerald-600 font-bold">
+                    <span className="text-[8px] border border-[#121212]/20 rounded px-1.5 py-0.5 text-[#121212]/40 font-bold">
                       A vs B
                     </span>
                   </button>
                 </div>
 
                 {/* Category 2 */}
-                <div className="space-y-1">
-                  <p className="px-3 pb-2 text-[9px] font-mono font-bold tracking-widest text-[#94A3B8] uppercase">MANAGEMENT</p>
+                <div className="space-y-1.5">
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">ESCROW REGISTRY</p>
 
                   <button
                     onClick={() => setActiveTab("positions")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "positions"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Sliders className="h-4.5 w-4.5" />
-                      <span>Open Positions</span>
+                      <Sliders className="h-4 w-4" strokeWidth={1} />
+                      <span>Ledger</span>
                     </div>
                   </button>
 
                   <button
                     onClick={() => setActiveTab("settlement")}
-                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "settlement"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <FileCheck className="h-4.5 w-4.5" />
-                      <span>Merkle Settlement</span>
+                      <FileCheck className="h-4 w-4" strokeWidth={1} />
+                      <span>Settlements</span>
                     </div>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-mono text-[#64748B]">
+                    <span className="text-[10px] text-[#121212]/40">
                       {settledPositions.length}
                     </span>
                   </button>
                 </div>
 
                 {/* Category 3 */}
-                <div className="space-y-1">
-                  <p className="px-3 pb-2 text-[9px] font-mono font-bold tracking-widest text-[#94A3B8] uppercase">CONFIGURATION</p>
+                <div className="space-y-1.5">
+                  <p className="px-3 pb-2 text-[9px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">SAFETY CODES</p>
 
                   <button
                     onClick={() => setActiveTab("settings")}
-                    className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-3 text-xs font-bold transition-all ${
+                    className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-3 text-xs font-mono-tech uppercase tracking-[0.1em] transition-editorial ${
                       activeTab === "settings"
-                        ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                        : "text-[#64748B] hover:bg-[#F4F8FC] hover:text-[#0F172A]"
+                        ? "bg-[#121212]/5 text-[#121212] font-bold"
+                        : "text-[#121212]/50 hover:bg-[#121212]/2 hover:text-[#121212]"
                     }`}
                   >
-                    <SettingsIcon className="h-4.5 w-4.5" />
-                    <span>Safety & Wallets</span>
+                    <SettingsIcon className="h-4 w-4" strokeWidth={1} />
+                    <span>Risk Desk</span>
                   </button>
                 </div>
               </nav>
             </div>
 
             {/* Bottom Developer Tag */}
-            <div className="p-6 border-t border-[#EAF2FB] text-xs font-mono text-[#94A3B8]">
-              <span>BUILD PRESENCE</span>
-              <span className="block font-bold text-[#64748B] mt-0.5">DEVNET STAGING</span>
+            <div className="p-8 border-t border-[#121212]/10 text-[9px] font-mono-tech text-[#121212]/30 tracking-[0.15em] uppercase">
+              <span>SYSTEM HOST: VERCEL CLOUD</span>
+              <span className="block font-bold mt-1">PROD TERMINAL LINK</span>
             </div>
           </aside>
 
-          {/* Right Main Panel container */}
+          {/* Right Content View */}
           <div className="flex-1 flex flex-col overflow-hidden">
             
-            {/* Top Navigation / Breadcrumbs / Control bar (Reference 1 Styled) */}
-            <header className="h-20 bg-white border-b border-[#E2E8F0] px-8 flex items-center justify-between flex-shrink-0">
+            {/* Top Navigation Control bar (Reference 1 Spacing) */}
+            <header className="h-20 bg-[#F5F2EB] border-b border-[#121212]/10 px-8 flex items-center justify-between flex-shrink-0">
               
               <div className="flex items-center gap-6">
                 {/* Back to Home CTA */}
                 <button
                   onClick={() => setViewMode("landing")}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition-colors border border-[#E2E8F0] px-3.5 py-2 rounded-xl"
+                  className="flex items-center gap-2 text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#121212]/60 hover:text-[#121212] transition-colors border border-[#121212]/15 px-4 py-2.5 rounded-full bg-transparent"
                 >
-                  <ArrowLeft className="h-4 w-4" />
-                  <span>Back to Home</span>
+                  <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1} />
+                  <span>Exit Terminal</span>
                 </button>
 
                 {/* Breadcrumbs */}
-                <div className="text-xs font-bold text-[#64748B] font-mono">
-                  <span>SYSTEM</span>
-                  <span className="mx-2 text-[#CBD5E1]">/</span>
-                  <span className="text-[#0F172A] uppercase">{activeTab}</span>
+                <div className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase">
+                  <span>HALCYON OS</span>
+                  <span className="mx-2 text-[#121212]/20">/</span>
+                  <span className="text-[#121212]">{activeTab}</span>
                 </div>
               </div>
 
-              {/* Central Status Indicators (Clean Badges) */}
-              <div className="flex items-center gap-3 text-xs font-mono">
-                <div className="hidden lg:flex items-center gap-1.5 bg-[#EDF6FD] border border-[#3B82F6]/10 rounded-xl px-3 py-1.5 text-[#3B82F6] font-bold">
-                  <span>RPC:</span>
+              {/* Status Badges */}
+              <div className="flex items-center gap-3 text-[10px] font-mono-tech tracking-[0.1em] uppercase">
+                <div className="hidden lg:flex items-center gap-1 bg-[#121212]/5 rounded-xl px-3.5 py-2 text-[#121212] font-bold border border-[#121212]/5">
+                  <span>NET:</span>
                   <span>Solana Devnet</span>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-xl px-3 py-1.5">
-                  <span className="text-[#64748B]">STREAM:</span>
-                  <div className="flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-bold text-[#0F172A]">
+                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#121212]/10 rounded-xl px-3.5 py-2">
+                  <span className="text-[#121212]/50">Stream:</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="font-bold text-[#121212]">
                       {runnerState.sseConnected ? "LIVE" : runnerState.status === "simulating" ? "SIMULATED" : "DISCONNECTED"}
                     </span>
                   </div>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-1.5 bg-white border border-[#E2E8F0] rounded-xl px-3 py-1.5">
-                  <span className="text-[#64748B]">STATUS:</span>
-                  <span className="font-bold text-[#0F172A] uppercase">{runnerState.status}</span>
+                <div className="hidden sm:flex items-center gap-1.5 bg-transparent border border-[#121212]/10 rounded-xl px-3.5 py-2">
+                  <span className="text-[#121212]/50">Status:</span>
+                  <span className="font-bold text-[#121212]">{runnerState.status}</span>
                 </div>
 
-                <div className="bg-[#0F172A] text-white rounded-xl px-3.5 py-1.5 font-bold flex items-center gap-1.5">
-                  <span className="text-slate-400">UPTIME:</span>
+                <div className="bg-[#121212] text-[#F5F2EB] rounded-xl px-4 py-2 font-bold font-mono-tech tracking-normal">
                   <span>{uptimeStr}</span>
                 </div>
               </div>
 
-              {/* Deployment Action Buttons */}
+              {/* Deployment Runner Controls */}
               <div className="flex items-center gap-2">
                 {runnerState.status !== "running" ? (
                   <button
                     onClick={() => triggerAction("start")}
                     disabled={actionPending}
-                    className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all"
+                    className="flex items-center gap-2 rounded-full bg-[#235BFF] hover:bg-blue-700 disabled:opacity-50 px-5 py-3 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial"
                   >
                     <Play className="h-3.5 w-3.5 fill-current" />
-                    DEPLOY RUNNER
+                    Deploy System
                   </button>
                 ) : (
                   <button
                     onClick={() => triggerAction("stop")}
                     disabled={actionPending}
-                    className="flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all"
+                    className="flex items-center gap-2 rounded-full bg-red-700 hover:bg-red-800 disabled:opacity-50 px-5 py-3 text-xs font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] transition-editorial"
                   >
                     <Square className="h-3.5 w-3.5 fill-current" />
-                    TERMINATE
+                    Shutdown
                   </button>
                 )}
 
                 <button
                   onClick={() => triggerAction("clear")}
                   disabled={actionPending}
-                  title="Clear temporary logs"
-                  className="rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 disabled:opacity-50 p-2.5 text-[#64748B] transition-colors"
+                  title="Clear Telemetry State"
+                  className="rounded-full border border-[#121212]/15 bg-transparent hover:bg-[#121212]/5 disabled:opacity-50 p-3 text-[#121212]/60 transition-editorial"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
             </header>
 
-            {/* Scrollable Main Content */}
-            <main className="flex-1 overflow-y-auto p-8 bg-[#F4F8FC]">
+            {/* Dashboard Scrollable Work space */}
+            <main className="flex-1 overflow-y-auto p-8 bg-[#F5F2EB]">
               
               {/* TAB 1: OVERVIEW */}
               {activeTab === "overview" && (
-                <div className="space-y-6">
+                <div className="space-y-10">
                   
                   {/* Grid Stat Cards (Reference 1 Proportions) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-blue-500" />
-                      <span className="text-[10px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">SIGNALS PARSED</span>
-                      <div className="mt-2 text-3xl font-extrabold text-[#0F172A] font-mono">
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">TELEMETRY SIGNALS LOGGED</span>
+                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#121212]">
                         {Math.max(runnerState.signalsCount, signals.length)}
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-indigo-500" />
-                      <span className="text-[10px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">ACTIVE TOURNAMENT TRADES</span>
-                      <div className="mt-2 text-3xl font-extrabold text-[#0F172A] font-mono">{openPositions.length}</div>
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">ACTIVE TOURNAMENT CONTRACTS</span>
+                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#121212]">{openPositions.length}</div>
                     </div>
 
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-emerald-500" />
-                      <span className="text-[10px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">ESCROW EXPOSURE</span>
-                      <div className="mt-2 text-3xl font-extrabold text-emerald-600 font-mono">
-                        {totalExposureUsdt} <span className="text-sm font-bold text-[#64748B]">USDT</span>
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">ACTIVE VAULT EXPOSURE</span>
+                      <div className="mt-4 text-4xl font-light font-serif-editorial text-[#235BFF]">
+                        {totalExposureUsdt} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#121212]/40">USDT</span>
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-purple-500" />
-                      <span className="text-[10px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">REALIZED ACCOUNT P&L</span>
-                      <div className={`mt-2 text-3xl font-extrabold font-mono ${
-                        metricsA.profit + metricsB.profit >= 0 ? "text-emerald-600" : "text-red-600"
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col justify-between hover-lift transition-editorial">
+                      <span className="text-[10px] font-mono-tech font-bold tracking-[0.2em] text-[#121212]/40 uppercase block">CUMULATIVE REALIZED P&L</span>
+                      <div className={`mt-4 text-4xl font-light font-serif-editorial ${
+                        metricsA.profit + metricsB.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"
                       }`}>
                         {metricsA.profit + metricsB.profit >= 0 ? "+" : ""}
-                        {(metricsA.profit + metricsB.profit).toFixed(2)} <span className="text-sm font-bold text-[#64748B]">USDT</span>
+                        {(metricsA.profit + metricsB.profit).toFixed(2)} <span className="text-xs font-mono-tech tracking-[0.1em] uppercase text-[#121212]/40">USDT</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Interactive Demo Manual Trigger Box */}
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-xl bg-[#3B82F6]/10 p-3 text-[#3B82F6]">
-                        <Zap className="h-5 w-5" />
+                  {/* Interactive Sandbox Duel Control Panel */}
+                  <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-4 text-left">
+                      <div className="h-10 w-10 rounded-full border-editorial bg-[#121212]/5 flex items-center justify-center text-[#121212]/80">
+                        <Zap className="h-5 w-5" strokeWidth={1} />
                       </div>
-                      <div className="text-left">
-                        <h4 className="font-bold text-[#0F172A] text-sm uppercase">Sandbox Escrow Demonstration</h4>
-                        <p className="text-[#64748B] text-xs mt-0.5">
-                          Force trigger an instant baseline signal shift to evaluate Agent escrow locking and automated proof settlement.
+                      <div>
+                        <h4 className="font-bold text-[#121212] text-xs uppercase tracking-[0.15em] font-mono-tech">Escrow Verification Sandbox</h4>
+                        <p className="text-[#121212]/50 text-xs mt-1 font-light">
+                          Manually push an anomaly z-score flag to lock double-agent collateral into Solana vault accounts.
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={handleTriggerManualDuel}
-                      className="rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] text-xs font-bold text-white px-5 py-3 shadow-md shadow-blue-500/10 hover:scale-[1.02] transition-transform flex-shrink-0"
+                      className="rounded-full bg-[#121212] hover:bg-black text-[10px] font-mono-tech uppercase tracking-[0.15em] text-[#F5F2EB] px-6 py-4 shadow-sm flex-shrink-0 transition-editorial"
                     >
-                      Trigger Manual Duel Instruction
+                      🚀 Trigger Escrow Duel Instruction
                     </button>
                   </div>
 
-                  {/* Open Positions Register (HR Table Style) */}
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-sm overflow-hidden">
-                    <div className="border-b border-[#EAF2FB] px-6 py-4 flex items-center justify-between">
-                      <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider">Active Escrow Exposure Desk</h3>
-                      <span className="rounded-full bg-blue-50 text-blue-600 border border-blue-100 px-2.5 py-0.5 text-[9px] font-mono font-bold">SECURED VAULTS</span>
+                  {/* Active Escrow Exposure Register (Editorial Table) */}
+                  <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
+                    <div className="border-b border-[#121212]/10 px-8 py-5 flex items-center justify-between">
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Active Escrow Ledgers</h3>
+                      <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50">NON-CUSTODIAL ESCROW VALUATION</span>
                     </div>
                     
-                    <div className="p-6">
+                    <div className="p-8">
                       {openPositions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-16 text-[#94A3B8] font-mono text-xs">
-                          <Layers className="mb-2 h-7 w-7 text-slate-300" />
-                          <span>NO ACTIVE ON-CHAIN COLLATERAL LOCKED</span>
+                        <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                          <Layers className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                          <span>NO ACTIVE LOCKS FOUND IN VAULT STATE</span>
                         </div>
                       ) : (
                         <div className="overflow-x-auto">
-                          <table className="w-full text-left text-xs font-mono">
+                          <table className="w-full text-left text-xs font-mono-tech">
                             <thead>
-                              <tr className="border-b border-[#E2E8F0] text-[#64748B]">
-                                <th className="pb-3.5">AGENT</th>
-                                <th className="pb-3.5">FIXTURE / EVENT</th>
-                                <th className="pb-3.5">STRATEGY</th>
-                                <th className="pb-3.5">STAKE (USDT)</th>
-                                <th className="pb-3.5">ODDS</th>
-                                <th className="pb-3.5">STATUS</th>
-                                <th className="pb-3.5">TRANSACTION</th>
+                              <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                                <th className="pb-4 uppercase tracking-[0.1em]">Agent</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Fixture Event</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Strategy</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Stake</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Odds</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Status</th>
+                                <th className="pb-4 uppercase tracking-[0.1em]">Audit Proof</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#EAF2FB]">
+                            <tbody className="divide-y divide-[#121212]/5">
                               {openPositions.map((pos) => (
-                                <tr key={pos.id} className="text-[#334155] hover:bg-[#F8FAFC]">
-                                  <td className="py-4">
-                                    <span className={`rounded-lg px-2 py-1 text-[9px] font-bold ${
-                                      pos.agent === "Agent A" ? "bg-blue-50 text-blue-600 border border-blue-100" : "bg-purple-50 text-purple-600 border border-purple-100"
+                                <tr key={pos.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                                  <td className="py-5">
+                                    <span className={`rounded border px-2.5 py-1 text-[9px] font-bold ${
+                                      pos.agent === "Agent A" ? "bg-blue-50/50 text-[#235BFF] border-[#235BFF]/10" : "bg-purple-50/50 text-purple-700 border-purple-700/10"
                                     }`}>
                                       {pos.agent}
                                     </span>
                                   </td>
-                                  <td className="py-4 text-[#0F172A] font-bold">{pos.fixtureName}</td>
-                                  <td className="py-4 text-xs text-[#64748B]">{pos.strategyName}</td>
-                                  <td className="py-4">{pos.stake} USDT</td>
-                                  <td className="py-4 text-[#3B82F6] font-bold">{pos.odds.toFixed(2)}</td>
-                                  <td className="py-4">
-                                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold ${
-                                      pos.status === "MATCHED" ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-amber-50 text-amber-700 border border-amber-100"
+                                  <td className="py-5 font-bold text-[#121212]">{pos.fixtureName}</td>
+                                  <td className="py-5 text-[#121212]/50 text-xs">{pos.strategyName}</td>
+                                  <td className="py-5">{pos.stake} USDT</td>
+                                  <td className="py-5 text-[#235BFF] font-bold">{pos.odds.toFixed(2)}</td>
+                                  <td className="py-5">
+                                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
+                                      pos.status === "MATCHED" ? "bg-green-50 text-[#0F8F67] border border-[#0F8F67]/20" : "bg-amber-50 text-amber-700 border border-amber-700/20"
                                     }`}>
-                                      <span className={`h-1.5 w-1.5 rounded-full ${pos.status === "MATCHED" ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+                                      <span className={`h-1.5 w-1.5 rounded-full ${pos.status === "MATCHED" ? "bg-[#0F8F67]" : "bg-amber-500"}`} />
                                       {pos.status}
                                     </span>
                                   </td>
-                                  <td className="py-4">
+                                  <td className="py-5">
                                     <a
                                       href={`https://explorer.solana.com/tx/${pos.txSignature}?cluster=devnet`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[#64748B] hover:text-[#3B82F6]"
+                                      className="inline-flex items-center gap-1 text-[#121212]/40 hover:text-[#235BFF] transition-colors"
                                     >
                                       <span>Verify root</span>
-                                      <ExternalLink className="h-3 w-3" />
+                                      <ExternalLink className="h-3 w-3" strokeWidth={1} />
                                     </a>
                                   </td>
                                 </tr>
@@ -1526,52 +1346,52 @@ export default function TradingDesk() {
                 </div>
               )}
 
-              {/* TAB 2: SIGNALS FEED */}
+              {/* TAB 2: SIGNALS REGISTRY */}
               {activeTab === "signals" && (
-                <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-sm overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-[#EAF2FB] px-6 py-4">
-                    <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider">Live Sharp Signals Registry</h3>
-                    <span className="rounded-full bg-blue-50 text-blue-600 border border-blue-100 px-2.5 py-0.5 text-[9px] font-mono font-bold">15M TELEMETRY WINDOW</span>
+                <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
+                  <div className="flex items-center justify-between border-b border-[#121212]/10 px-8 py-5">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Live Telemetry Signals Registry</h3>
+                    <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50">TELEMETRY IN-PLAY WINDOW</span>
                   </div>
                   
-                  <div className="p-6">
+                  <div className="p-8">
                     {signals.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-[#94A3B8] font-mono text-xs">
-                        <TrendingUp className="mb-2 h-7 w-7 text-slate-300" />
-                        <span>WAITING FOR ANOMALY INJECTION FROM FEED</span>
+                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <TrendingUp className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                        <span>WAITING FOR TELEMETRY EVENT STREAMS</span>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
-                        <table className="w-full text-left text-xs font-mono">
+                        <table className="w-full text-left text-xs font-mono-tech">
                           <thead>
-                            <tr className="border-b border-[#E2E8F0] text-[#64748B]">
-                              <th className="pb-3.5">TIME</th>
-                              <th className="pb-3.5">FIXTURE / EVENT</th>
-                              <th className="pb-3.5">MARKET OUTCOME</th>
-                              <th className="pb-3.5">BASELINE DEVIATION</th>
-                              <th className="pb-3.5">Z-SCORE</th>
-                              <th className="pb-3.5">VELOCITY INDEX</th>
+                            <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                              <th className="pb-4 uppercase tracking-[0.1em]">Time</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Fixture Match</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Market Event</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Deviation shift</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Z-Score</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Velocity Index</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#EAF2FB]">
+                          <tbody className="divide-y divide-[#121212]/5">
                             {signals.map((sig) => (
-                              <tr key={sig.id} className="text-[#334155] hover:bg-[#F8FAFC]">
-                                <td className="py-4 text-[#94A3B8]">{new Date(sig.timestamp).toLocaleTimeString()}</td>
-                                <td className="py-4 text-[#0F172A] font-bold">{sig.fixtureName}</td>
-                                <td className="py-4 text-xs text-[#64748B] uppercase">{sig.marketType} ({sig.outcome})</td>
+                              <tr key={sig.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                                <td className="py-4 text-[#121212]/40">{new Date(sig.timestamp).toLocaleTimeString()}</td>
+                                <td className="py-4 font-bold text-[#121212]">{sig.fixtureName}</td>
+                                <td className="py-4 uppercase text-xs text-[#121212]/50">{sig.marketType} ({sig.outcome})</td>
                                 <td className="py-4 font-bold">
-                                  <span className="text-[#94A3B8]">{sig.oldOdds.toFixed(2)}</span>
-                                  <span className="mx-2 text-[#CBD5E1]">→</span>
-                                  <span className="text-[#0F172A]">{sig.newOdds.toFixed(2)}</span>
+                                  <span className="text-[#121212]/30">{sig.oldOdds.toFixed(2)}</span>
+                                  <span className="mx-2 text-[#121212]/20">→</span>
+                                  <span className="text-[#121212]">{sig.newOdds.toFixed(2)}</span>
                                 </td>
                                 <td className="py-4">
-                                  <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
+                                  <span className={`px-2.5 py-1 rounded text-[10px] font-bold ${
                                     sig.zScore >= 0 ? "bg-green-50 text-green-700 border border-green-100" : "bg-red-50 text-red-700 border border-red-100"
                                   }`}>
                                     {sig.zScore >= 0 ? "+" : ""}{sig.zScore.toFixed(2)}
                                   </span>
                                 </td>
-                                <td className="py-4 text-[#64748B]">{sig.velocity >= 0 ? "+" : ""}{sig.velocity.toFixed(4)}/s</td>
+                                <td className="py-4 text-[#121212]/50">{sig.velocity >= 0 ? "+" : ""}{sig.velocity.toFixed(4)}/s</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1584,26 +1404,25 @@ export default function TradingDesk() {
 
               {/* TAB 3: STRATEGIES */}
               {activeTab === "strategies" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {(strategies.length ? strategies : PRE_BUILT_DUMMY_STRATEGIES).map((strat) => (
-                    <div key={strat.name} className="flex flex-col justify-between rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
-                      <div>
-                        <div className="flex items-center justify-between border-b border-[#EAF2FB] pb-4 mb-4">
-                          <h3 className="font-extrabold text-sm text-[#0F172A]">{strat.name}</h3>
-                          <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 text-[9px] font-mono font-bold">MONITOR ACTIVE</span>
+                    <div key={strat.name} className="flex flex-col justify-between rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
+                      <div className="space-y-5">
+                        <div className="flex items-center justify-between border-b border-[#121212]/10 pb-4">
+                          <h3 className="font-bold text-xs font-mono-tech uppercase tracking-wider text-[#121212]">{strat.name}</h3>
+                          <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-0.5 text-[#121212]/50 uppercase tracking-widest font-bold">MONITOR ACTIVE</span>
                         </div>
-                        <p className="text-xs text-[#64748B] leading-relaxed">{strat.description}</p>
+                        <p className="text-xs text-[#121212]/60 leading-relaxed font-light">{strat.description}</p>
                         
-                        {/* Strategy criteria */}
-                        <div className="mt-5 space-y-2">
-                          <span className="text-[9px] font-mono font-bold tracking-widest text-[#94A3B8] uppercase block">Execution Parameters</span>
+                        <div className="space-y-2 text-left">
+                          <span className="text-[9px] font-mono-tech font-bold tracking-[0.15em] text-[#121212]/40 uppercase block">Telemetry Parameters</span>
                           <div className="space-y-1.5">
                             {strat.conditions.map((cond, idx) => (
-                              <div key={idx} className="flex items-center justify-between rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] px-3.5 py-2.5 text-xs font-mono">
-                                <span className="text-[#3B82F6] font-bold">{cond.stat.replace("_", " ")}</span>
+                              <div key={idx} className="flex items-center justify-between rounded-xl bg-[#121212]/2 border border-[#121212]/5 px-4 py-3 text-xs font-mono-tech">
+                                <span className="text-[#235BFF] font-bold uppercase">{cond.stat.replace("_", " ")}</span>
                                 <div className="space-x-1.5">
-                                  <span className="text-[#94A3B8]">{cond.comparison}</span>
-                                  <span className="text-[#0F172A] font-extrabold">{cond.threshold}</span>
+                                  <span className="text-[#121212]/30">{cond.comparison}</span>
+                                  <span className="text-[#121212] font-bold">{cond.threshold}</span>
                                 </div>
                               </div>
                             ))}
@@ -1611,14 +1430,14 @@ export default function TradingDesk() {
                         </div>
                       </div>
 
-                      <div className="mt-6 border-t border-[#EAF2FB] pt-4 text-xs font-mono text-[#64748B] space-y-1.5">
+                      <div className="mt-8 border-t border-[#121212]/10 pt-4 text-xs font-mono-tech text-[#121212]/50 space-y-1.5 text-left">
                         <div className="flex justify-between">
-                          <span>Trigger Signal:</span>
-                          <span className="text-[#0F172A] font-bold">{strat.entry_signal}</span>
+                          <span>Trigger Anomaly:</span>
+                          <span className="text-[#121212] font-bold">{strat.entry_signal}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Stake allocation:</span>
-                          <span className="text-[#0F172A] font-bold">{strat.stake_usdt} USDT</span>
+                          <span>Capital allocation:</span>
+                          <span className="text-[#121212] font-bold">{strat.stake_usdt} USDT</span>
                         </div>
                       </div>
                     </div>
@@ -1626,90 +1445,91 @@ export default function TradingDesk() {
                 </div>
               )}
 
-              {/* TAB 4: ARENA DUEL */}
+              {/* TAB 4: ARENA DUEL (Bloomberg / Financial Times style) */}
               {activeTab === "arena" && (
-                <div className="space-y-6">
+                <div className="space-y-10">
                   
-                  {/* Agents side-by-side display */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Agents info cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Agent A */}
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-blue-500" />
-                      <div className="flex items-center justify-between pb-3 border-b border-[#EAF2FB]">
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm text-left">
+                      <div className="flex items-center justify-between pb-4 border-b border-[#121212]/10">
                         <div>
-                          <span className="text-[9px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">AGENT A</span>
-                          <h4 className="font-extrabold text-[#0F172A] text-sm mt-0.5">Momentum Engine</h4>
+                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#121212]/40 uppercase block">AGENT A CONTRACTS</span>
+                          <h4 className="font-serif-editorial text-2xl font-light text-[#121212] mt-1">Trend Follower</h4>
                         </div>
-                        <span className="rounded-full bg-blue-50 text-blue-600 border border-blue-100 px-2.5 py-0.5 text-[9px] font-mono font-bold">ONLINE</span>
+                        <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-2.5 py-0.5 text-[#121212]/50 font-bold uppercase">ONLINE</span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 pt-4 text-left font-mono">
+                      <div className="grid grid-cols-3 gap-4 pt-6 font-mono-tech text-xs">
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">REALIZED P&L</span>
-                          <span className={`text-sm font-extrabold ${metricsA.profit >= 0 ? "text-emerald-600" : "text-red-600"}`}>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
+                          <span className={`text-sm font-extrabold ${metricsA.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"}`}>
                             {metricsA.profit >= 0 ? "+" : ""}{metricsA.profit.toFixed(2)} USDT
                           </span>
                         </div>
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">TOTAL POSITIONS</span>
-                          <span className="text-sm font-extrabold text-[#0F172A]">{metricsA.positionsCount}</span>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
+                          <span className="text-sm font-extrabold text-[#121212]">{metricsA.positionsCount}</span>
                         </div>
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">WIN RATE</span>
-                          <span className="text-sm font-extrabold text-[#0F172A]">{metricsA.winRate.toFixed(1)}%</span>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
+                          <span className="text-sm font-extrabold text-[#121212]">{metricsA.winRate.toFixed(1)}%</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Agent B */}
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-[3px] bg-purple-500" />
-                      <div className="flex items-center justify-between pb-3 border-b border-[#EAF2FB]">
+                    <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm text-left">
+                      <div className="flex items-center justify-between pb-4 border-b border-[#121212]/10">
                         <div>
-                          <span className="text-[9px] font-mono font-bold tracking-wider text-[#94A3B8] uppercase">AGENT B</span>
-                          <h4 className="font-extrabold text-[#0F172A] text-sm mt-0.5">Reversion Engine</h4>
+                          <span className="text-[9px] font-mono-tech tracking-[0.15em] text-[#121212]/40 uppercase block">AGENT B CONTRACTS</span>
+                          <h4 className="font-serif-editorial text-2xl font-light text-[#121212] mt-1">Mean Reversion</h4>
                         </div>
-                        <span className="rounded-full bg-purple-50 text-purple-600 border border-purple-100 px-2.5 py-0.5 text-[9px] font-mono font-bold">ONLINE</span>
+                        <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-2.5 py-0.5 text-[#121212]/50 font-bold uppercase">ONLINE</span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 pt-4 text-left font-mono">
+                      <div className="grid grid-cols-3 gap-4 pt-6 font-mono-tech text-xs">
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">REALIZED P&L</span>
-                          <span className={`text-sm font-extrabold ${metricsB.profit >= 0 ? "text-emerald-600" : "text-red-600"}`}>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">REALIZED P&L</span>
+                          <span className={`text-sm font-extrabold ${metricsB.profit >= 0 ? "text-[#0F8F67]" : "text-red-700"}`}>
                             {metricsB.profit >= 0 ? "+" : ""}{metricsB.profit.toFixed(2)} USDT
                           </span>
                         </div>
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">TOTAL POSITIONS</span>
-                          <span className="text-sm font-extrabold text-[#0F172A]">{metricsB.positionsCount}</span>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">POSITIONS</span>
+                          <span className="text-sm font-extrabold text-[#121212]">{metricsB.positionsCount}</span>
                         </div>
                         <div>
-                          <span className="text-[#94A3B8] text-[9px] block">WIN RATE</span>
-                          <span className="text-sm font-extrabold text-[#0F172A]">{metricsB.winRate.toFixed(1)}%</span>
+                          <span className="text-[#121212]/40 text-[9px] tracking-wider uppercase block">WIN RATE</span>
+                          <span className="text-sm font-extrabold text-[#121212]">{metricsB.winRate.toFixed(1)}%</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Custom Area Chart (Reference 1 Graphic style) */}
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
-                    <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider mb-6">Agent Profit Curves</h3>
+                  {/* Financial Times Style curve chart */}
+                  <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Realized Profit curves</h3>
+                      <span className="text-[9px] font-mono-tech border border-[#121212]/10 rounded-full px-3 py-1 text-[#121212]/50 uppercase tracking-widest font-bold font-mono-tech">ANALYTICAL TELEMETRY</span>
+                    </div>
                     
                     {pointsA.length <= 1 && pointsB.length <= 1 ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-[#94A3B8] font-mono text-xs">
-                        <Sliders className="h-6 w-6 text-slate-300 mb-2" />
-                        <span>WAITING FOR TRADE RESOLUTIONS FOR CHARTING</span>
+                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <Sliders className="h-6 w-6 text-[#121212]/20 mb-2" strokeWidth={1} />
+                        <span>WAITING FOR SETTLED HISTORICAL RESULTS FOR CHARTING</span>
                       </div>
                     ) : (
-                      <div className="relative h-64 w-full border-l border-b border-[#E2E8F0] pt-4">
+                      <div className="relative h-64 w-full border-l border-b border-[#121212]/15 pt-4">
                         <svg className="h-full w-full overflow-visible" preserveAspectRatio="none">
-                          <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
+                          <line x1="0" y1="50%" x2="100%" y2="50%" stroke="rgba(18,18,18,0.06)" strokeWidth="1" strokeDasharray="3 3" />
                           
                           <path
                             d={makeSvgPath(pointsA, 800, 240)}
                             fill="none"
-                            stroke="#3B82F6"
-                            strokeWidth="3"
+                            stroke="#235BFF"
+                            strokeWidth="2.5"
                             strokeLinecap="round"
                             className="transition-all duration-300"
                           />
@@ -1717,21 +1537,21 @@ export default function TradingDesk() {
                           <path
                             d={makeSvgPath(pointsB, 800, 240)}
                             fill="none"
-                            stroke="#A855F7"
-                            strokeWidth="3"
+                            stroke="#121212"
+                            strokeWidth="2.5"
                             strokeLinecap="round"
                             className="transition-all duration-300"
                           />
                         </svg>
                         
-                        <div className="absolute top-4 right-4 flex gap-4 text-[9px] font-mono">
-                          <div className="flex items-center gap-1.5">
-                            <span className="h-2.5 w-2.5 rounded bg-blue-500" />
-                            <span className="text-[#64748B]">Agent A (Trend Follower)</span>
+                        <div className="absolute top-4 right-4 flex gap-4 text-[9px] font-mono-tech uppercase tracking-[0.1em]">
+                          <div className="flex items-center gap-2">
+                            <span className="h-2 w-2 rounded-full bg-[#235BFF]" />
+                            <span className="text-[#121212]/50">Agent A (Trend Follower)</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="h-2.5 w-2.5 rounded bg-purple-500" />
-                            <span className="text-[#64748B]">Agent B (Mean Reversion)</span>
+                          <div className="flex items-center gap-2">
+                            <span className="h-2 w-2 rounded-full bg-[#121212]" />
+                            <span className="text-[#121212]/50">Agent B (Mean Reversion)</span>
                           </div>
                         </div>
                       </div>
@@ -1740,74 +1560,74 @@ export default function TradingDesk() {
                 </div>
               )}
 
-              {/* TAB 5: OPEN POSITIONS FULL REGISTER */}
+              {/* TAB 5: LEDGER REGISTER */}
               {activeTab === "positions" && (
-                <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-sm overflow-hidden">
-                  <div className="border-b border-[#EAF2FB] px-6 py-4">
-                    <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider">Historical Position Register</h3>
+                <div className="rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
+                  <div className="border-b border-[#121212]/10 px-8 py-5">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Historical Ledger Register</h3>
                   </div>
                   
-                  <div className="p-6">
+                  <div className="p-8">
                     {positions.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-16 text-[#94A3B8] font-mono text-xs">
-                        <Sliders className="mb-2 h-7 w-7 text-slate-300" />
-                        <span>NO TRADES LAUNCHED IN SYSTEM REGISTRY</span>
+                      <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                        <Sliders className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                        <span>NO TRANSACTIONS FOUND IN LEDGER</span>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
-                        <table className="w-full text-left text-xs font-mono">
+                        <table className="w-full text-left text-xs font-mono-tech">
                           <thead>
-                            <tr className="border-b border-[#E2E8F0] text-[#64748B]">
-                              <th className="pb-3.5">ID / CONTRACT PDA</th>
-                              <th className="pb-3.5">AGENT</th>
-                              <th className="pb-3.5">STRATEGY</th>
-                              <th className="pb-3.5">EVENT FIXTURE</th>
-                              <th className="pb-3.5">STAKE (USDT)</th>
-                              <th className="pb-3.5">ODDS</th>
-                              <th className="pb-3.5">STATUS</th>
-                              <th className="pb-3.5">BLOCKCHAIN LINK</th>
+                            <tr className="border-b border-[#121212]/10 text-[#121212]/40">
+                              <th className="pb-4 uppercase tracking-[0.1em]">PDA Key Address</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Agent</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Strategy</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Fixture</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Allocation</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Odds</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Status</th>
+                              <th className="pb-4 uppercase tracking-[0.1em]">Contract audit</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#EAF2FB]">
+                          <tbody className="divide-y divide-[#121212]/5">
                             {positions.map((pos) => (
-                              <tr key={pos.id} className="text-[#334155] hover:bg-[#F8FAFC]">
-                                <td className="py-4">
-                                  <div className="font-bold text-[#0F172A]">ID: {pos.id.slice(-6)}</div>
-                                  <div className="text-[9px] text-[#94A3B8] truncate max-w-[120px]">{pos.makerIntentPda}</div>
+                              <tr key={pos.id} className="text-[#121212]/80 hover:bg-[#121212]/2 transition-colors">
+                                <td className="py-5 font-bold">
+                                  <div>ID: {pos.id.slice(-6)}</div>
+                                  <div className="text-[9px] text-[#121212]/40 truncate max-w-[120px] font-normal">{pos.makerIntentPda}</div>
                                 </td>
-                                <td className="py-4">
-                                  <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
-                                    pos.agent === "Agent A" ? "bg-blue-50 text-blue-600 border border-blue-100" : "bg-purple-50 text-purple-600 border border-purple-100"
+                                <td className="py-5">
+                                  <span className={`rounded border px-2.5 py-1 text-[9px] font-bold ${
+                                    pos.agent === "Agent A" ? "bg-blue-50/50 text-[#235BFF] border-[#235BFF]/10" : "bg-purple-50/50 text-purple-700 border-purple-700/10"
                                   }`}>
                                     {pos.agent}
                                   </span>
                                 </td>
-                                <td className="py-4 text-[#64748B]">{pos.strategyName}</td>
-                                <td className="py-4 font-bold text-[#0F172A]">{pos.fixtureName}</td>
-                                <td className="py-4">{pos.stake} USDT</td>
-                                <td className="py-4 text-[#3B82F6] font-bold">{pos.odds.toFixed(2)}</td>
-                                <td className="py-4">
-                                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                                <td className="py-5 text-[#121212]/50 text-xs">{pos.strategyName}</td>
+                                <td className="py-5 font-bold text-[#121212]">{pos.fixtureName}</td>
+                                <td className="py-5">{pos.stake} USDT</td>
+                                <td className="py-5 text-[#235BFF] font-bold">{pos.odds.toFixed(2)}</td>
+                                <td className="py-5">
+                                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
                                     pos.status === "SETTLED"
-                                      ? "bg-green-50 text-green-700 border border-green-100"
+                                      ? "bg-green-50 text-[#0F8F67] border border-[#0F8F67]/20"
                                       : pos.status === "MATCHED"
-                                      ? "bg-blue-50 text-blue-700 border border-blue-100"
+                                      ? "bg-blue-50 text-[#235BFF] border border-[#235BFF]/20"
                                       : pos.status === "FAILED"
-                                      ? "bg-red-50 text-red-700 border border-red-100"
-                                      : "bg-amber-50 text-amber-700 border border-amber-100"
+                                      ? "bg-red-50 text-red-700 border border-red-700/20"
+                                      : "bg-amber-50 text-amber-700 border border-amber-700/20"
                                   }`}>
                                     {pos.status}
                                   </span>
                                 </td>
-                                <td className="py-4">
+                                <td className="py-5">
                                   <a
                                     href={`https://explorer.solana.com/tx/${pos.txSignature}?cluster=devnet`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-[#64748B] hover:text-[#3B82F6]"
+                                    className="inline-flex items-center gap-1 text-[#121212]/40 hover:text-[#235BFF] transition-colors"
                                   >
                                     <span>Verify</span>
-                                    <ExternalLink className="h-3 w-3" />
+                                    <ExternalLink className="h-3 w-3" strokeWidth={1} />
                                   </a>
                                 </td>
                               </tr>
@@ -1822,19 +1642,19 @@ export default function TradingDesk() {
 
               {/* TAB 6: SETTLEMENTS */}
               {activeTab === "settlement" && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   
                   {/* Journal List */}
-                  <div className="lg:col-span-2 rounded-2xl border border-[#E2E8F0] bg-white shadow-sm overflow-hidden">
-                    <div className="border-b border-[#EAF2FB] px-6 py-4">
-                      <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider">Merkle Proof Settle Journal</h3>
+                  <div className="lg:col-span-2 rounded-[24px] border-editorial bg-[#F5F2EB] shadow-sm overflow-hidden">
+                    <div className="border-b border-[#121212]/10 px-8 py-5">
+                      <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase">Merkle Proof Settle Journal</h3>
                     </div>
                     
-                    <div className="p-6">
+                    <div className="p-8">
                       {settledPositions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-[#94A3B8] font-mono text-xs">
-                          <FileCheck className="mb-2 h-7 w-7 text-slate-300" />
-                          <span>NO SETTLED POSITIONS DISCOVERED IN CURRENT SESSION</span>
+                        <div className="flex flex-col items-center justify-center py-20 text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase">
+                          <FileCheck className="mb-3 h-8 w-8 text-[#121212]/20" strokeWidth={1} />
+                          <span>NO SETTLED ARCHIVES FOUND IN STORAGE</span>
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -1842,30 +1662,30 @@ export default function TradingDesk() {
                             <div
                               key={pos.id}
                               onClick={() => setSelectedSettledId(pos.id)}
-                              className={`flex items-center justify-between rounded-xl border p-4 cursor-pointer transition-colors ${
+                              className={`flex items-center justify-between rounded-xl border p-5 cursor-pointer transition-editorial text-left ${
                                 selectedSettledId === pos.id
-                                  ? "border-[#3B82F6] bg-[#3B82F6]/5"
-                                  : "border-[#E2E8F0] bg-white hover:bg-slate-50"
+                                  ? "border-[#121212] bg-[#121212]/3"
+                                  : "border-[#121212]/10 bg-transparent hover:bg-[#121212]/2"
                               }`}
                             >
-                              <div className="font-mono text-xs space-y-1">
+                              <div className="font-mono-tech text-xs space-y-1.5">
                                 <div className="flex items-center gap-2">
-                                  <span className="font-bold text-[#0F172A]">FIXTURE #{pos.fixtureId}</span>
-                                  <span className={`rounded-lg px-2 py-0.5 text-[9px] font-bold ${
-                                    pos.agent === "Agent A" ? "bg-blue-50 text-blue-600 border border-blue-100" : "bg-purple-50 text-purple-600 border border-purple-100"
+                                  <span className="font-bold text-[#121212]">FIXTURE #{pos.fixtureId}</span>
+                                  <span className={`rounded border px-2 py-0.5 text-[9px] font-bold ${
+                                    pos.agent === "Agent A" ? "bg-blue-50/50 text-[#235BFF] border-[#235BFF]/10" : "bg-purple-50/50 text-purple-700 border-purple-700/10"
                                   }`}>
                                     {pos.agent}
                                   </span>
                                 </div>
-                                <div className="text-[#0F172A] font-bold">{pos.fixtureName}</div>
-                                <div className="text-[10px] text-[#64748B]">Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}</div>
+                                <div className="text-[#121212] font-bold text-sm">{pos.fixtureName}</div>
+                                <div className="text-[10px] text-[#121212]/50">Strategy: {pos.strategyName} | Odds: {pos.odds.toFixed(2)}</div>
                               </div>
 
-                              <div className="text-right font-mono text-xs space-y-1">
-                                <span className="rounded-full bg-green-50 text-green-700 border border-green-100 px-2 py-0.5 text-[9px] font-bold">
+                              <div className="text-right font-mono-tech text-xs space-y-1.5 flex-shrink-0">
+                                <span className="rounded border border-[#0F8F67]/20 bg-green-50 text-[#0F8F67] px-2 py-0.5 text-[9px] font-bold">
                                   SETTLED
                                 </span>
-                                <div className="text-[9px] text-[#94A3B8]">Click to audit proof path</div>
+                                <div className="text-[9px] text-[#121212]/40">Click to audit path</div>
                               </div>
                             </div>
                           ))}
@@ -1881,45 +1701,45 @@ export default function TradingDesk() {
                         const pos = positions.find((p) => p.id === selectedSettledId);
                         if (!pos) return null;
                         return (
-                          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 space-y-4 font-mono text-xs relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-3 text-[9px] text-[#94A3B8] uppercase font-mono">VERDICT</div>
-                            <h4 className="font-bold text-[#0F172A] border-b border-[#EAF2FB] pb-3 text-xs uppercase tracking-wider">Oracle Proof Receipt</h4>
+                          <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 space-y-6 font-mono-tech text-xs relative overflow-hidden text-left shadow-sm">
+                            <div className="absolute top-0 right-0 p-4 text-[9px] text-[#121212]/30 uppercase font-mono-tech">VERDICT VERIFY</div>
+                            <h4 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] border-b border-[#121212]/10 pb-3 uppercase">Oracle Proof Receipt</h4>
                             
-                            <div className="space-y-3 text-left">
+                            <div className="space-y-4 text-left">
                               <div>
-                                <span className="text-[9px] text-[#94A3B8] uppercase block">Trade ID</span>
-                                <span className="text-[#0F172A] font-bold">{pos.id}</span>
+                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Trade Contract ID</span>
+                                <span className="text-[#121212] font-bold">{pos.id}</span>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#94A3B8] uppercase block">Validator Root (Epoch 20633)</span>
-                                <span className="text-[#64748B] select-all block break-all bg-[#F8FAFC] p-2 border border-[#E2E8F0] rounded-xl text-[10px]">
+                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Validator Root (Epoch 20633)</span>
+                                <span className="text-[#121212]/70 select-all block break-all bg-[#121212]/2 p-3 border border-[#121212]/10 rounded-xl text-[10px]">
                                   0x6d0429f5f0a904d2e9b152063c8c1df69ba90b9b30c1d68377b2be48fc8e5c3c
                                 </span>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#94A3B8] uppercase block">Merkle Proof Array</span>
-                                <div className="text-[#64748B] bg-[#F8FAFC] p-2.5 border border-[#E2E8F0] rounded-xl space-y-1 text-[10px]">
-                                  <div>Node 0 (Left): 0x77b...c1d6 (Verified)</div>
-                                  <div>Node 1 (Right): 0x30c...e8fc (Verified)</div>
+                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">Merkle Proof Nodes</span>
+                                <div className="text-[#121212]/50 bg-[#121212]/2 p-3 border border-[#121212]/10 rounded-xl space-y-1.5 text-[9px] tracking-normal">
+                                  <div>Node 0: 0x77b...c1d6 (Verified)</div>
+                                  <div>Node 1: 0x30c...e8fc (Verified)</div>
                                 </div>
                               </div>
 
                               <div>
-                                <span className="text-[9px] text-[#94A3B8] uppercase block">Oracle Value to Prove</span>
-                                <span className="text-[#0F172A] font-bold">Goals: 1.0 (Full Time)</span>
+                                <span className="text-[9px] text-[#121212]/40 uppercase block tracking-wider">State Outcomes Proven</span>
+                                <span className="text-[#121212] font-bold">Goals: 1.0 (Full Time)</span>
                               </div>
 
-                              <div className="pt-2 border-t border-[#EAF2FB]">
+                              <div className="pt-2 border-t border-[#121212]/10">
                                 <a
                                   href={`https://explorer.solana.com/tx/${pos.settleTxSignature}?cluster=devnet`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] hover:bg-slate-50 text-[#0F172A] py-3.5 transition-colors text-center font-bold"
+                                  className="w-full flex items-center justify-center gap-1.5 rounded-full border border-[#121212]/15 bg-transparent hover:bg-[#121212]/5 text-[#121212] py-4 transition-editorial text-center font-bold tracking-[0.1em]"
                                 >
-                                  <span>SOLANA TRANSACTION</span>
-                                  <ExternalLink className="h-3.5 w-3.5" />
+                                  <span>SOLANA CONTRACT</span>
+                                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={1} />
                                 </a>
                               </div>
                             </div>
@@ -1927,71 +1747,71 @@ export default function TradingDesk() {
                         );
                       })()
                     ) : (
-                      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-[#94A3B8] font-mono text-xs flex flex-col items-center justify-center min-h-[300px]">
-                        <Info className="h-5 w-5 text-slate-300 mb-2" />
-                        <span>Select a settled event from the ledger journal to verify proof details.</span>
+                      <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 text-center text-[#121212]/30 font-mono-tech text-[10px] tracking-wider uppercase flex flex-col items-center justify-center min-h-[300px]">
+                        <Info className="h-5 w-5 text-[#121212]/20 mb-2" strokeWidth={1} />
+                        <span>Select a settled ledger contract to verify cryptographic proof.</span>
                       </div>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* TAB 7: SETTINGS & RISK */}
+              {/* TAB 7: SAFETY RISK DESK */}
               {activeTab === "settings" && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Parameter controls */}
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
-                    <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider mb-6 border-b border-[#EAF2FB] pb-3 flex items-center gap-2">
-                      <ShieldAlert className="h-4.5 w-4.5 text-[#3B82F6]" />
+                  <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase mb-6 border-b border-[#121212]/10 pb-3 flex items-center gap-2">
+                      <ShieldAlert className="h-4.5 w-4.5 text-[#121212]/80" strokeWidth={1} />
                       Circuit Breakers & Parameters
                     </h3>
                     
-                    <form onSubmit={handleSaveSettings} className="space-y-4 font-mono text-xs text-left">
+                    <form onSubmit={handleSaveSettings} className="space-y-5 font-mono-tech text-xs text-left">
                       <div>
-                        <label className="block text-[#64748B] mb-1.5 uppercase font-bold tracking-wider">Z-Score Sensitivity Threshold (σ)</label>
+                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Z-Score Sensitivity Threshold (σ)</label>
                         <input
                           type="number"
                           step="0.1"
                           value={zScoreThreshold}
                           onChange={(e) => setZScoreThreshold(e.target.value)}
-                          className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-3 text-[#0F172A] outline-none focus:border-[#3B82F6] font-bold"
+                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#64748B] mb-1.5 uppercase font-bold tracking-wider">Max Total Exposure Limit (USDT)</label>
+                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Total Exposure Limit (USDT)</label>
                         <input
                           type="number"
                           value={maxTotalExposure}
                           onChange={(e) => setMaxTotalExposure(e.target.value)}
-                          className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-3 text-[#0F172A] outline-none focus:border-[#3B82F6] font-bold"
+                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#64748B] mb-1.5 uppercase font-bold tracking-wider">Max Positions Per Fixture</label>
+                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Positions Per Fixture</label>
                         <input
                           type="number"
                           value={maxPositionsPerFixture}
                           onChange={(e) => setMaxPositionsPerFixture(e.target.value)}
-                          className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-3 text-[#0F172A] outline-none focus:border-[#3B82F6] font-bold"
+                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[#64748B] mb-1.5 uppercase font-bold tracking-wider">Max Session Loss Shutdown (USDT)</label>
+                        <label className="block text-[#121212]/50 mb-1.5 uppercase font-bold tracking-[0.15em]">Max Session Loss Shutdown (USDT)</label>
                         <input
                           type="number"
                           value={maxSessionLoss}
                           onChange={(e) => setMaxSessionLoss(e.target.value)}
-                          className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-3 text-[#0F172A] outline-none focus:border-[#3B82F6] font-bold"
+                          className="w-full rounded-xl border border-[#121212]/15 bg-[#121212]/2 px-3.5 py-3.5 text-[#121212] outline-none focus:border-[#121212] font-bold"
                         />
                       </div>
 
                       <button
                         type="submit"
                         disabled={actionPending}
-                        className="w-full rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold py-3.5 transition-colors disabled:opacity-50"
+                        className="w-full rounded-full bg-[#121212] hover:bg-black text-[#F5F2EB] font-bold py-4 transition-colors disabled:opacity-50 uppercase tracking-[0.15em]"
                       >
                         APPLY CIRCUIT CONFIGURATION
                       </button>
@@ -1999,23 +1819,23 @@ export default function TradingDesk() {
                   </div>
 
                   {/* Wallet management console */}
-                  <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
-                    <h3 className="font-bold text-xs text-[#0F172A] uppercase tracking-wider mb-6 border-b border-[#EAF2FB] pb-3 flex items-center gap-2">
-                      <DollarSign className="h-4.5 w-4.5 text-[#3B82F6]" />
-                      Agent Wallet Management
+                  <div className="rounded-[24px] border-editorial bg-[#F5F2EB] p-8 shadow-sm">
+                    <h3 className="font-mono-tech font-bold text-[10px] tracking-[0.15em] text-[#121212] uppercase mb-6 border-b border-[#121212]/10 pb-3 flex items-center gap-2">
+                      <DollarSign className="h-4.5 w-4.5 text-[#121212]/80" strokeWidth={1} />
+                      Agent Wallet Configuration
                     </h3>
                     
-                    <div className="space-y-6 font-mono text-xs text-left">
+                    <div className="space-y-6 font-mono-tech text-xs text-left">
                       <div className="space-y-2">
-                        <span className="text-[#64748B] uppercase block font-bold tracking-wider">Agent A (Momentum) Address</span>
+                        <span className="text-[#121212]/40 uppercase block font-bold tracking-[0.15em]">Agent A Address</span>
                         <div className="flex items-center gap-2">
-                          <span className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-3 text-[#334155] font-bold select-all flex-1 truncate">
+                          <span className="bg-[#121212]/2 border border-[#121212]/15 rounded-xl px-3.5 py-3 text-[#121212]/80 font-bold select-all flex-1 truncate">
                             EwvSmry1ByU9PEqxPSsTLhQQATMeUqZiWBGsDvufCTdo
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent A")}
                             disabled={fundingAgent !== null}
-                            className="rounded-xl border border-[#3B82F6]/30 hover:border-[#3B82F6] bg-[#3B82F6]/5 hover:bg-[#3B82F6]/10 text-[#3B82F6] px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0"
+                            className="rounded-full border border-[#121212]/15 hover:bg-[#121212]/5 text-[#121212]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
                           >
                             {fundingAgent === "Agent A" ? "FUNDING..." : "AIRDROP"}
                           </button>
@@ -2023,25 +1843,25 @@ export default function TradingDesk() {
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[#64748B] uppercase block font-bold tracking-wider">Agent B (Reversion) Address</span>
+                        <span className="text-[#121212]/40 uppercase block font-bold tracking-[0.15em]">Agent B Address</span>
                         <div className="flex items-center gap-2">
-                          <span className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-3 text-[#334155] font-bold select-all flex-1 truncate">
+                          <span className="bg-[#121212]/2 border border-[#121212]/15 rounded-xl px-3.5 py-3 text-[#121212]/80 font-bold select-all flex-1 truncate">
                             41ac5tzvdc5z4BEv5suHmgC32sY2goaNDnTAvJ8gWAs7
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent B")}
                             disabled={fundingAgent !== null}
-                            className="rounded-xl border border-[#3B82F6]/30 hover:border-[#3B82F6] bg-[#3B82F6]/5 hover:bg-[#3B82F6]/10 text-[#3B82F6] px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0"
+                            className="rounded-full border border-[#121212]/15 hover:bg-[#121212]/5 text-[#121212]/80 px-4 py-3 font-bold transition-all disabled:opacity-50 flex-shrink-0 uppercase tracking-[0.1em]"
                           >
                             {fundingAgent === "Agent B" ? "FUNDING..." : "AIRDROP"}
                           </button>
                         </div>
                       </div>
 
-                      <div className="rounded-xl bg-[#EDF6FD] border border-[#3B82F6]/10 p-4 text-[#64748B] flex gap-3">
-                        <Info className="h-4.5 w-4.5 text-[#3B82F6] flex-shrink-0 mt-0.5" />
-                        <p className="leading-relaxed text-[11px]">
-                          Agent keypairs are stored locally in the workspace <code className="text-[#0F172A] font-bold">wallets.json</code> file. Faucet/airdrop requests automatically request SOL for contract Gas fees and simulated USDT on Solana Devnet.
+                      <div className="rounded-xl bg-[#121212]/2 border border-[#121212]/5 p-4 text-[#121212]/50 flex gap-3">
+                        <Info className="h-4.5 w-4.5 text-[#121212]/60 flex-shrink-0 mt-0.5" strokeWidth={1} />
+                        <p className="leading-relaxed text-[10px] font-light">
+                          Keypair storage linkage matches configuration file <code className="text-[#121212] font-bold">wallets.json</code>. Airdrop calls direct devnet SOL faucet injection and simulated USDT balance allocation.
                         </p>
                       </div>
                     </div>
@@ -2051,10 +1871,10 @@ export default function TradingDesk() {
             </main>
           </div>
 
-          {/* Floating alert notifications toast */}
+          {/* Floating toast notification */}
           {newSignalAlert && (
-            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-emerald-500 bg-white p-4 shadow-2xl animate-pulse font-mono text-xs text-[#0F172A]">
-              <Activity className="h-4.5 w-4.5 animate-spin text-emerald-500" />
+            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border border-[#235BFF]/30 bg-[#F5F2EB] p-4 shadow-xl font-mono-tech text-xs text-[#121212] border-editorial">
+              <Activity className="h-4 w-4 animate-spin text-[#235BFF]" strokeWidth={1.5} />
               <span>{newSignalAlert}</span>
             </div>
           )}
