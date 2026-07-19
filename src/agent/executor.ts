@@ -321,7 +321,7 @@ async function executeCreateTrade(
     stakeB: bigint;
   }
 ) {
-  const authority = params.authority.publicKey;
+  const authority = params.traderA.publicKey; // Set authority to Trader A
   const traderA = params.traderA.publicKey;
   const traderB = params.traderB.publicKey;
   const [tradeEscrow] = tradeEscrowPda(params.tradeId);
@@ -350,7 +350,7 @@ async function executeCreateTrade(
     if (!info) {
       preIxs.push(
         createAssociatedTokenAccountInstruction(
-          params.authority.publicKey,
+          params.traderA.publicKey,
           traderATokenAccount,
           traderA,
           network.usdtMint,
@@ -366,7 +366,7 @@ async function executeCreateTrade(
     if (!info) {
       preIxs.push(
         createAssociatedTokenAccountInstruction(
-          params.authority.publicKey,
+          params.traderA.publicKey,
           traderBTokenAccount,
           traderB,
           network.usdtMint,
@@ -399,7 +399,7 @@ async function executeCreateTrade(
       systemProgram: SystemProgram.programId,
     })
     .preInstructions(preIxs)
-    .signers([params.authority, params.traderA, params.traderB])
+    .signers([params.traderA, params.traderB])
     .rpc();
 }
 
