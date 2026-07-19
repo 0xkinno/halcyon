@@ -77,29 +77,37 @@ function savePositions() {
  * Initializes and loads the local agent keypairs. Generates them if missing.
  */
 export async function initAgentWallets(): Promise<{ agentA: string; agentB: string }> {
-  let wallets: { agentASecret: number[]; agentBSecret: number[] } | null = null;
+  if (process.env.AGENT_A_SECRET_KEY && process.env.AGENT_B_SECRET_KEY) {
+    console.log("[Executor] Loading Agent A & B wallets from environment variables...");
+    const secretA = JSON.parse(process.env.AGENT_A_SECRET_KEY);
+    const secretB = JSON.parse(process.env.AGENT_B_SECRET_KEY);
+    agentAKeypair = Keypair.fromSecretKey(Uint8Array.from(secretA));
+    agentBKeypair = Keypair.fromSecretKey(Uint8Array.from(secretB));
+  } else {
+    let wallets: { agentASecret: number[]; agentBSecret: number[] } | null = null;
 
-  if (fs.existsSync(walletsFilePath)) {
-    try {
-      wallets = JSON.parse(fs.readFileSync(walletsFilePath, "utf-8"));
-    } catch (e) {
-      console.error("[Executor] Error reading wallets.json:", e);
+    if (fs.existsSync(walletsFilePath)) {
+      try {
+        wallets = JSON.parse(fs.readFileSync(walletsFilePath, "utf-8"));
+      } catch (e) {
+        console.error("[Executor] Error reading wallets.json:", e);
+      }
     }
-  }
 
-  if (!wallets) {
-    console.log("[Executor] Keypairs not found. Generating fresh Agent A & Agent B wallets...");
-    const keypairA = Keypair.generate();
-    const keypairB = Keypair.generate();
-    wallets = {
-      agentASecret: Array.from(keypairA.secretKey),
-      agentBSecret: Array.from(keypairB.secretKey),
-    };
-    fs.writeFileSync(walletsFilePath, JSON.stringify(wallets, null, 2), "utf-8");
-  }
+    if (!wallets) {
+      console.log("[Executor] Keypairs not found. Generating fresh Agent A & Agent B wallets...");
+      const keypairA = Keypair.generate();
+      const keypairB = Keypair.generate();
+      wallets = {
+        agentASecret: Array.from(keypairA.secretKey),
+        agentBSecret: Array.from(keypairB.secretKey),
+      };
+      fs.writeFileSync(walletsFilePath, JSON.stringify(wallets, null, 2), "utf-8");
+    }
 
-  agentAKeypair = Keypair.fromSecretKey(Uint8Array.from(wallets.agentASecret));
-  agentBKeypair = Keypair.fromSecretKey(Uint8Array.from(wallets.agentBSecret));
+    agentAKeypair = Keypair.fromSecretKey(Uint8Array.from(wallets.agentASecret));
+    agentBKeypair = Keypair.fromSecretKey(Uint8Array.from(wallets.agentBSecret));
+  }
 
   console.log(`[Executor] Agent A (Momentum) wallet: ${agentAKeypair.publicKey.toBase58()}`);
   console.log(`[Executor] Agent B (Reversion) wallet: ${agentBKeypair.publicKey.toBase58()}`);
