@@ -16,6 +16,8 @@ export interface RunnerState {
   signalsCount: number;
   sseConnected: boolean;
   lastUpdateTs: number;
+  agentAAddress?: string;
+  agentBAddress?: string;
 }
 
 export let runnerState: RunnerState = {
@@ -25,6 +27,12 @@ export let runnerState: RunnerState = {
   sseConnected: false,
   lastUpdateTs: 0,
 };
+
+// Initialize wallets on boot to populate addresses immediately
+initAgentWallets().then((wallets) => {
+  runnerState.agentAAddress = wallets.agentA;
+  runnerState.agentBAddress = wallets.agentB;
+}).catch((e) => console.error("[Arena] Failed to init wallets on boot:", e));
 
 const startTime = Date.now();
 let runTimer: ReturnType<typeof setInterval> | null = null;

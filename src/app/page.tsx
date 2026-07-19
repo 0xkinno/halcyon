@@ -72,6 +72,8 @@ interface RunnerState {
   signalsCount: number;
   sseConnected: boolean;
   lastUpdateTs: number;
+  agentAAddress?: string;
+  agentBAddress?: string;
 }
 
 interface StrategyCondition {
@@ -1832,7 +1834,7 @@ export default function TradingDesk() {
                         <span className="text-[#111111]/40 uppercase block font-bold tracking-[0.15em]">Agent A Address</span>
                         <div className="flex items-center gap-2">
                           <span className="bg-[#111111]/2 border border-[#111111]/15 rounded-xl px-3.5 py-3 text-[#111111]/80 font-bold select-all flex-1 truncate">
-                            EwvSmry1ByU9PEqxPSsTLhQQATMeUqZiWBGsDvufCTdo
+                            {runnerState.agentAAddress || "HFds67LtZ8JshEPNnoZfgyVqXg9xTpoYDttkuT2DW2PN"}
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent A")}
@@ -1848,7 +1850,7 @@ export default function TradingDesk() {
                         <span className="text-[#111111]/40 uppercase block font-bold tracking-[0.15em]">Agent B Address</span>
                         <div className="flex items-center gap-2">
                           <span className="bg-[#111111]/2 border border-[#111111]/15 rounded-xl px-3.5 py-3 text-[#111111]/80 font-bold select-all flex-1 truncate">
-                            41ac5tzvdc5z4BEv5suHmgC32sY2goaNDnTAvJ8gWAs7
+                            {runnerState.agentBAddress || "HnwkpWtC5QSVxyTwb6H4zDHR2QPYu4z8dkEtvasysFak"}
                           </span>
                           <button
                             onClick={() => handleFundAgent("Agent B")}
