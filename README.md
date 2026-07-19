@@ -30,7 +30,7 @@ An autonomous, multi-dimensional sports trading agent desk that detects statisti
 | :--- | :--- |
 | **Dashboard Visualizer** | [https://halcyon-ten-sand.vercel.app](https://halcyon-ten-sand.vercel.app) |
 | **GitHub Repository** | [https://github.com/0xkinno/halcyon](https://github.com/0xkinno/halcyon) |
-| **YouTube Live Demo** | *Link Coming Soon* |
+| **YouTube Live Demo** | [Youtube](https://youtu.be/nIUY7moNZ1o?si=yekM3QRiPTsl4kqy) |
 | **Solana Program ID (Devnet)** | [`6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J`](https://explorer.solana.com/address/6pW64gN1s2uqjHkn1unFeEjAwJkPGHoppGvS715wyP2J?cluster=devnet) |
 
 ---
